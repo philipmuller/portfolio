@@ -45,7 +45,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center gap-0 h-screen snap-y overflow-y-scroll">
+    <main className="flex flex-col items-center gap-0 h-screen snap-y snap-mandatory overflow-y-scroll">
 
       <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor='#5B5540' />
       <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor="#3F1C2E" />

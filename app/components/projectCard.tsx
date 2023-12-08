@@ -26,7 +26,7 @@ export default function ProjectCard({ sceneLink, bgColor } : { sceneLink: string
         compact: {
             borderRadius: "2rem",
             //position: "relative",
-            height: "70vh",
+            height: "65vh",
         },
         expanded: {
             borderRadius: "0rem",
@@ -55,7 +55,7 @@ export default function ProjectCard({ sceneLink, bgColor } : { sceneLink: string
                 <Spline scene={sceneLink} />
             </motion.div>
 
-            <div className='flex flex-col basis-1/6 px-6 pb-10 z-10 gap-2'>
+            <div className='flex flex-col basis-1/6 px-6 pb-20 z-10 gap-2'>
                 <h1 className='text-lg font-medium tracking-widest uppercase'>Organon</h1>
                 <p className='text-md font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
                 <button onClick={onClick} className='text-md w-fit font-normal p-2 px-4 rounded-xl mt-4 tracking-widest underline-offset-4 bg-white text-stone-800'>Learn more</button>
