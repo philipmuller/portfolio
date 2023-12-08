@@ -11,17 +11,16 @@ export default function Home() {
   }
 
   return (
-    <main className="flex flex-col min-h-screen items-center justify-between bg-[#5B5540]">
-      <div className="w-full min-h-screen h-screen p-8 flex flex-col gap-6">
+    <main className="flex flex-col items-center justify-between bg-[#5B5540]">
+      <div className="w-full h-[90vh] p-8 flex flex-col gap-6">
 
         <div className="w-full basis-5/6 items-center justify-between font-mono text-sm overflow-hidden rounded-2xl">
           <Spline onScroll={onScroll} scene="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode"/>
-          <p className="text-white">Hello World</p>
         </div>
 
         <div className='flex flex-col basis-1/6 px-6 pb-10 z-10 gap-1'>
           <h1 className='text-lg font-medium tracking-widest uppercase'>Organon</h1>
-          <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
+          <p className='text-md font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
         </div>
 
       </div>
