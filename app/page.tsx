@@ -12,11 +12,11 @@ export default function Home() {
   const [isExpanded, setIsExpanded] = useState(false);
   //const { x, y } = useScroll();
 
-  useEffect(() => {
-    onScrollE();
-    window.addEventListener('scroll', onScrollE);
-    return () => window.removeEventListener('scroll', onScrollE);
-  }, []);
+  // useEffect(() => {
+  //   onScrollE();
+  //   window.addEventListener('scroll', onScrollE);
+  //   return () => window.removeEventListener('scroll', onScrollE);
+  // }, []);
 
   function stringify(obj: any) {
     let cache: any[] = [];
@@ -34,9 +34,9 @@ export default function Home() {
     cache = []; // reset the cache
     return str;
   }
-  function onScrollE() {
-    console.log(window.scrollY);
-  }
+  // function onScrollE() {
+  //   console.log(window.scrollY);
+  // }
 
   function onScroll(e: any) {
     //e === null ? console.log('null') : console.log(e);
@@ -81,9 +81,9 @@ export default function Home() {
   
 
   return (
-    <body className={`bg-[${(window.scrollY < 100) ? colors[0] : colors[1]}`}>
+    <body>
 
-      <main className='flex flex-col items-center gap-0 h-screen snap-y snap-mandatory overflow-y-scroll' onScroll={onScroll}>
+      <main className='flex flex-col items-center gap-0 h-screen snap-y snap-mandatory overflow-y-scroll'>
         <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon'/>
         <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2'/>
         <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[2]} title='Test 3'/>
