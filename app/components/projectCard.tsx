@@ -41,9 +41,12 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
 
     return (
         <>
-        <meta name="theme-color" content={bgColor} />
+        {/* <meta name="theme-color" content={bgColor} /> */}
         <motion.section className={`w-full flex flex-col gap-6 snap-center snap-always snap-mandatory`}
         onViewportEnter={() => {
+            const metaThemeColor = document.querySelector("meta[name=theme-color]");
+            console.log(metaThemeColor);
+            metaThemeColor?.setAttribute("content", bgColor);
             // console.log('enter'+title);
             // console.log(JSON.stringify(document.querySelector("meta[name='theme-color']")));
             // document.querySelector("meta[name='theme-color']")!.setAttribute("content", bgColor);

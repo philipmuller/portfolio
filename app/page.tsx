@@ -75,7 +75,7 @@ export default function Home() {
   const colors = [
     '#5B5540',
     '#3F1C2E',
-    '#5B5540',
+    '#1C3B3F',
   ];
 
   

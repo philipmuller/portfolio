@@ -16,6 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
+      <meta name="theme-color" content={"#FFFFFF"} />
       {children}
     </html>
   )
