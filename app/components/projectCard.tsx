@@ -43,11 +43,6 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
 
     return (
         <motion.section className={`w-full min-h-[100svh] flex flex-col gap-6 snap-center snap-always snap-mandatory`}
-        onViewportEnter={() => {
-            const metaThemeColor = document.querySelector("meta[name=theme-color]");
-            console.log(metaThemeColor);
-            metaThemeColor?.setAttribute("content", bgColor);
-        }}
         layout
         // @ts-ignore for some reason putting position into variants throws an error, even if it works
         variants={containerVariants}
@@ -63,7 +58,13 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
             </motion.div>
 
             <div className='flex flex-col basis-1/6 px-6 z-10 gap-1'>
-                <h1 className='text-lg font-medium tracking-widest uppercase'>{title}</h1>
+                <motion.h1
+                onViewportEnter={() => {
+                    const metaThemeColor = document.querySelector("meta[name=theme-color]");
+                    console.log(metaThemeColor);
+                    metaThemeColor?.setAttribute("content", bgColor);
+                }}
+                className='text-lg font-medium tracking-widest uppercase'>{title}</motion.h1>
                 <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
                 <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-xl mt-4 underline-offset-4 bg-white text-stone-800'>Learn more</button>
             </div>
