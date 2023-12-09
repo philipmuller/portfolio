@@ -13,12 +13,14 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
             zIndex: 1,
             padding: "2rem",
             position: "relative",
+            height: "100svh",
         },
         expanded: {
             backgroundColor: bgColor,
             zIndex: 200,
             padding: 0,
             position: "absolute",
+            height: "auto",
         },
     };
     
@@ -26,7 +28,7 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
         compact: {
             borderRadius: "2rem",
             //position: "relative",
-            height: "65svh",
+            height: "70svh",
         },
         expanded: {
             borderRadius: "0rem",
@@ -40,18 +42,11 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
     };
 
     return (
-        <>
-        {/* <meta name="theme-color" content={bgColor} /> */}
-        <motion.section className={`w-full flex flex-col gap-6 snap-center snap-always snap-mandatory`}
+        <motion.section className={`w-full min-h-[100svh] flex flex-col gap-6 snap-center snap-always snap-mandatory`}
         onViewportEnter={() => {
             const metaThemeColor = document.querySelector("meta[name=theme-color]");
             console.log(metaThemeColor);
             metaThemeColor?.setAttribute("content", bgColor);
-
-            // console.log('enter'+title);
-            // console.log(JSON.stringify(document.querySelector("meta[name='theme-color']")));
-            // document.querySelector("meta[name='theme-color']")!.setAttribute("content", bgColor);
-
         }}
         layout
         // @ts-ignore for some reason putting position into variants throws an error, even if it works
@@ -67,14 +62,12 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
                 <Spline scene={sceneLink} />
             </motion.div>
 
-            <div className='flex flex-col basis-1/6 px-6 pb-20 z-10 gap-1'>
+            <div className='flex flex-col basis-1/6 px-6 z-10 gap-1'>
                 <h1 className='text-lg font-medium tracking-widest uppercase'>{title}</h1>
                 <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
                 <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-xl mt-4 underline-offset-4 bg-white text-stone-800'>Learn more</button>
             </div>
 
         </motion.section>
-        </>
-        
     );
 }

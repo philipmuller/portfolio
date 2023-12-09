@@ -81,7 +81,7 @@ export default function Home() {
   
 
   return (
-    <main className='flex flex-col items-center gap-0 h-[100svh] snap-y snap-mandatory overflow-y-scroll border-2'>
+    <main className='flex flex-col items-center gap-0 h-[100svh] snap-y snap-mandatory overflow-y-scroll'>
         <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon'/>
         <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2'/>
         <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[2]} title='Test 3'/>
