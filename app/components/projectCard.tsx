@@ -4,8 +4,9 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Spline from '@splinetool/react-spline';
 
-export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink: string, bgColor: string, title: string }) {
+export default function ProjectCard({ sceneLink, bgColor, title, featured } : { sceneLink: string, bgColor: string, title: string, featured?: boolean }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [renderIsVisible, setRenderIsVisible] = useState(false);
 
     const containerVariants = {
         compact: {
@@ -13,14 +14,12 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
             zIndex: 1,
             padding: "2rem",
             position: "relative",
-            height: "100svh",
         },
         expanded: {
             backgroundColor: bgColor,
             zIndex: 200,
             padding: 0,
             position: "absolute",
-            height: "auto",
         },
     };
     
@@ -42,19 +41,34 @@ export default function ProjectCard({ sceneLink, bgColor, title } : { sceneLink:
     };
 
     return (
-        <motion.section className={`w-full min-h-[100svh] flex flex-col gap-6 snap-center snap-always snap-mandatory`}
+        <motion.section className={`w-full min-h-[100svh] flex flex-col gap-6 snap-center snap-always snap-mandatory ${featured ? 'col-span-1 lg:col-span-2' : ''}`}
         layout
         // @ts-ignore for some reason putting position into variants throws an error, even if it works
         variants={containerVariants}
         animate={isExpanded ? "expanded" : "compact"}>
 
             <motion.div
-            className="w-full items-center justify-between font-mono text-sm overflow-hidden rounded-2xl"
+            onViewportEnter={() => {
+                setRenderIsVisible(true);
+            }}
+            onViewportLeave={() => {
+                /*
+                the below makes for great performance, since there are never more than like 4 scenes rendered at the same time,
+                but it also makes for a bad experience, since the scene has to reload every time you scroll back to it.
+                If the amount of projects is reasonable (in the <10 range), leaving it off is probably the best option.
+
+                If more projects get added, it might be worthwhile to implement a scroll window that keeps scenes rendered
+                up to a certain amount of projects away from the current one, and then starts to unload projects at the start
+                */
+                //setRenderIsVisible(false);
+            }}
+            className={`w-full items-center justify-between font-mono text-sm overflow-hidden rounded-2xl relative`}
             layout
             variants={cardVariants}
             initial="compact"
             animate={isExpanded ? "expanded" : "compact"}>
-                <Spline scene={sceneLink} />
+                <div className='w-full h-full bg-stone-600 animate-pulse absolute -z-10' />
+                {renderIsVisible && <Spline scene={sceneLink} />}
             </motion.div>
 
             <div className='flex flex-col basis-1/6 px-6 z-10 gap-1'>
