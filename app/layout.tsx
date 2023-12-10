@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Navbar from './components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,7 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <meta name="theme-color" content={"#FFFFFF"} />
-      <body>{children}</body>
+      <body>
+        <Navbar />
+        {children}
+      </body>
     </html>
   )
 }

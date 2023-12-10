@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Spline from '@splinetool/react-spline';
 
-export default function ProjectCard({ sceneLink, bgColor, title, featured } : { sceneLink: string, bgColor: string, title: string, featured?: boolean }) {
+export default function ProjectCard({ sceneLink, bgColor, title, span } : { sceneLink: string, bgColor: string, title: string, span?: number }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [renderIsVisible, setRenderIsVisible] = useState(false);
 
@@ -12,14 +12,24 @@ export default function ProjectCard({ sceneLink, bgColor, title, featured } : { 
         compact: {
             backgroundColor: bgColor,
             zIndex: 1,
-            padding: "2rem",
+            paddingLeft: "2rem",
+            paddingRight: "2rem",
+            paddingTop: "4rem",
+            paddingBottom: "2rem",
             position: "relative",
+            gridColumn: `span ${span ?? 1}`,
+            //width: "25vw",
         },
         expanded: {
             backgroundColor: bgColor,
             zIndex: 200,
-            padding: 0,
+            paddingLeft: ["38vw", "0rem"],
+            paddingRight: ["38vw", "0rem"],
+            paddingTop: "0rem",
+            paddingBottom: "0rem",
             position: "absolute",
+            gridColumn: `span ${span ?? 1}`,
+            //width: "100vw",
         },
     };
     
@@ -27,12 +37,12 @@ export default function ProjectCard({ sceneLink, bgColor, title, featured } : { 
         compact: {
             borderRadius: "2rem",
             //position: "relative",
-            height: "70svh",
+            height: "72%",
         },
         expanded: {
             borderRadius: "0rem",
             //position: "fixed",
-            height: "100svh",
+            height: "100%",
         }
     };
     
@@ -41,10 +51,12 @@ export default function ProjectCard({ sceneLink, bgColor, title, featured } : { 
     };
 
     return (
-        <motion.section className={`w-full min-h-[100svh] flex flex-col gap-6 snap-center snap-always snap-mandatory ${featured ? 'col-span-1 lg:col-span-2' : ''}`}
+        <motion.section className={`w-full h-[100svh] lg:h-[80svh] flex flex-col gap-6 snap-center snap-always snap-mandatory`}
         layout
+        layoutId={title}
         // @ts-ignore for some reason putting position into variants throws an error, even if it works
         variants={containerVariants}
+        transition={{ ease: "easeOut", duration: 0.5 }}
         animate={isExpanded ? "expanded" : "compact"}>
 
             <motion.div
@@ -80,7 +92,7 @@ export default function ProjectCard({ sceneLink, bgColor, title, featured } : { 
                 }}
                 className='text-lg font-medium tracking-widest uppercase'>{title}</motion.h1>
                 <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
-                <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-xl mt-4 underline-offset-4 bg-white text-stone-800'>Learn more</button>
+                <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-xl mt-4 underline-offset-4 bg-white text-stone-800 lg:bg-transparent lg:p-0 lg:px-0 lg:text-stone-50 lg:underline'>Learn more</button>
             </div>
 
         </motion.section>
