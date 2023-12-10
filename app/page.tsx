@@ -67,19 +67,26 @@ export default function Home() {
 
   const colors = (breakpoint > Breakpoint.md) ? desktopColors : mobileColors;
   
-  
+ 
 
   return (
-    <motion.main className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-2 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll' layout>
-      <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon' span={1}/>
-      <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2'/>
-      <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 3'/>
-      <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 9'/>
-      <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 4' span={1}/>
-      <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Test 5' />
-      <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 6'/>
-      <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 7' span={1}/>
-    </motion.main>
+    <main>
+      <motion.section className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-2 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll' layout>
+        <section className={`w-[100vw] h-[100vh] items-center justify-between font-mono text-sm overflow-hidden rounded-2xl relative snap-center snap-always snap-mandatory lg:col-span-2 xl:col-span-3 2xl:col-span-4`}>
+          <Spline scene='https://prod.spline.design/82a-tWcUd2svDtB6/scene.splinecode'/>
+        </section>
+        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon' span={1}/>
+        <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2'/>
+        <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 3'/>
+        <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 9'/>
+        <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 4' span={1}/>
+        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Test 5' />
+        <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 6'/>
+        <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 7' span={1}/>
+      </motion.section>
+    
+    </main>
+    
   )
 }
 

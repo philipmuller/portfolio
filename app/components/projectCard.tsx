@@ -92,7 +92,7 @@ export default function ProjectCard({ sceneLink, bgColor, title, span } : { scen
                 }}
                 className='text-lg font-medium tracking-widest uppercase'>{title}</motion.h1>
                 <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
-                <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-xl mt-4 underline-offset-4 bg-white text-stone-800 lg:bg-transparent lg:p-0 lg:px-0 lg:text-stone-50 lg:underline'>Learn more</button>
+                <button onClick={onClick} className='text-sm w-fit font-normal p-2 px-4 rounded-full -ml-1.5 lg:ml-0 mt-4 underline-offset-4 bg-white text-stone-800 lg:bg-transparent lg:p-0 lg:px-0 lg:text-stone-50 lg:underline'>Learn more</button>
             </div>
 
         </motion.section>
