@@ -1,17 +1,9 @@
 "use client";
 
-import Image from 'next/image';
-import Spline from '@splinetool/react-spline';
-import { Horse, Heart, Cube, List } from '@phosphor-icons/react';
-import { AnimatePresence, LayoutGroup, motion, spring, useMotionValue } from 'framer-motion';
-import { MouseEvent, UIEvent, UIEventHandler, use, useCallback, useEffect, useRef, useState } from 'react';
-//import ProjectCard from './components/projectCard';
-import useScroll from './hooks/useScroll';
+import { motion } from 'framer-motion';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Breakpoint, useBreakpoints } from './hooks/useBreakpoints';
 import dynamic from 'next/dynamic';
-import useOnScreen from './hooks/useOnScreen';
-import Navbar from './components/navbar';
-import Logo from './components/logo';
 import Cover from './components/cover';
 
 const ProjectCard = dynamic(() => import('./components/projectCard'));
