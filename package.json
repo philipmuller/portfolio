@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.15",
+    "@react-three/fiber": "^8.15.12",
     "@splinetool/react-spline": "^2.2.6",
+    "@types/three": "^0.159.0",
     "framer-motion": "^10.16.15",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
     "react-responsive": "^9.0.2",
-    "spline": "^0.0.0"
+    "shadergradient": "^1.2.5",
+    "spline": "^0.0.0",
+    "three": "^0.159.0"
   },
   "devDependencies": {
     "@types/node": "^20",

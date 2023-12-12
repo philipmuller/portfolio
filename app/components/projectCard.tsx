@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Spline from '@splinetool/react-spline';
 
-export default function ProjectCard({ sceneLink, bgColor, title, span } : { sceneLink: string, bgColor: string, title: string, span?: number }) {
+export default function ProjectCard({ sceneLink, bgColor, title, span, className, peek, scrollOffset } : { sceneLink: string, bgColor: string, title: string, span?: number, className?: string, peek?: number, scrollOffset?: number }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [renderIsVisible, setRenderIsVisible] = useState(false);
 
@@ -35,6 +35,7 @@ export default function ProjectCard({ sceneLink, bgColor, title, span } : { scen
     
     const cardVariants = {
         compact: {
+            y: (peek != undefined && scrollOffset != undefined && scrollOffset <= peek) ? -peek+scrollOffset : 0,
             borderRadius: "2rem",
             //position: "relative",
             height: "72%",
@@ -51,7 +52,7 @@ export default function ProjectCard({ sceneLink, bgColor, title, span } : { scen
     };
 
     return (
-        <motion.section className={`w-full h-[100svh] lg:h-[80svh] flex flex-col gap-6 snap-center snap-always snap-mandatory`}
+        <motion.section className={`w-full h-[100svh] lg:h-[80svh] lg:rounded-xl flex flex-col gap-6 snap-center snap-always snap-mandatory ${className ?? ""}`}
         layout
         layoutId={title}
         // @ts-ignore for some reason putting position into variants throws an error, even if it works
