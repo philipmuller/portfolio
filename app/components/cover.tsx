@@ -5,9 +5,10 @@ import { EventInfo, TargetAndTransition, motion, useMotionValue, useTransform, u
 
 export default function Cover() {
 
-    const logoZRotation = useMotionValue(0);
+    const coreRotateZ = useMotionValue(315);
+    const rotateZ = useSpring(coreRotateZ);
 
-    const rotateZ = useTransform(logoZRotation, [-180, 180], ["0deg", "360deg"]);
+    //const rotateZ = useTransform(logoZRotation, [-180, 180], ["0deg", "360deg"]);
 
     function handleMouseMove(event: MouseEvent) {
         const rect = event.currentTarget.getBoundingClientRect();
@@ -24,7 +25,8 @@ export default function Cover() {
         const zRotationRad = Math.atan2(yPercent, xPercent);
         const zRotation = (zRotationRad * 180 / Math.PI) + 180;
 
-        logoZRotation.set(zRotation);
+        coreRotateZ.set(zRotation);
+        //logoZRotation.set(zRotation);
 
         console.log("Z rotation:" + zRotation);
         //console.log(x, y);
@@ -36,17 +38,17 @@ export default function Cover() {
 
             <motion.div
             onMouseMove={handleMouseMove}
-            whileHover={{
-                rotateZ: rotateZ.get(),
+            style={{
+                rotateZ
                 
             }}
             transition={{
                 duration: 2,
             }}
             onHoverEnd={() => {
-                logoZRotation.set(135);
+                rotateZ.set(315);
             }}>
-                <Logo className="w-36 h-36 lg:w-60 lg:h-60"/>
+                <Logo className="w-36 h-36 lg:w-60 lg:h-60 rotate-45"/>
             </motion.div>
             
             <div className='flex flex-col gap-4 lg:gap-8 md:max-w-md lg:max-w-lg'>
