@@ -84,7 +84,7 @@ export default function Home() {
       ref={ref}>
 
         <Cover/>
-        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon' span={1} peek={230} scrollOffset={scrollOffset}/>
+        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon' span={1} peek={breakpoint <= Breakpoint.md ? 120 : 230} scrollOffset={scrollOffset}/>
         <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2' peek={350} scrollOffset={scrollOffset}/>
         <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 3' peek={190} scrollOffset={scrollOffset}/>
         <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 9' peek={320} scrollOffset={scrollOffset}/> 
