@@ -48,7 +48,10 @@ export default function ProjectCard({ projectInfo, breakpoint, sceneUrl, coverUr
         onHoverEnd={isMobile ? undefined : () => setRenderIsVisible(() => false)}
         >
 
-            <motion.div layout layoutId={projectInfo.title+"cover"} animate={{y: peekOffset()}} className={`w-full h-[72%] items-center justify-between font-mono text-sm overflow-hidden rounded-2xl relative`}>
+            <motion.div 
+            onViewportEnter={() => { if(isMobile) { setRenderIsVisible(() => true)} } } 
+            layout layoutId={projectInfo.title+"cover"} animate={{y: peekOffset()}} 
+            className={`w-full h-[72%] items-center justify-between font-mono text-sm overflow-hidden rounded-2xl relative`}>
                 <div className='w-full h-full absolute'/>
                 <Image src={coverUrl ?? ""} fill={true} objectFit="cover" alt="" className={`w-full h-full absolute ${renderIsVisible ? "animate-pulse" : ""}`}/>
                 {renderIsVisible && sceneUrl != undefined && 
