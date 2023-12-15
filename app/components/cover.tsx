@@ -26,11 +26,6 @@ export default function Cover() {
         const zRotation = (zRotationRad * 180 / Math.PI) + 180;
 
         coreRotateZ.set(zRotation);
-        //logoZRotation.set(zRotation);
-
-        console.log("Z rotation:" + zRotation);
-        //console.log(x, y);
-        //console.log(xPercent, yPercent);
     }
 
     return (

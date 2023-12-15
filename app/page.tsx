@@ -1,24 +1,28 @@
 "use client";
 
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion, spring } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Breakpoint, useBreakpoints } from './hooks/useBreakpoints';
 import dynamic from 'next/dynamic';
 import Cover from './components/cover';
+import Spline from '@splinetool/react-spline';
+import Image from 'next/image';
+import { ProjectInfo } from './model/project-info';
+import { title } from 'process';
+import { projects } from './data'
 
 const ProjectCard = dynamic(() => import('./components/projectCard'));
 
 export default function Home() {
   const [isExpanded, setIsExpanded] = useState(false);
   const breakpoint = useBreakpoints();
-  const [modalId, setModalId] = useState<number | undefined>(undefined);
+  const [modalId, setModalId] = useState<string | undefined>(undefined);
 
   const [scrollOffset, setScrollOffset] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
   const handleScroll = useCallback( (ev: Event) => {
     const target = ev.target as HTMLDivElement;
-    console.log(target.scrollTop);
     setScrollOffset(() => target.scrollTop)
   }, []);
 
@@ -28,53 +32,16 @@ export default function Home() {
     return () => scrollableDiv?.removeEventListener("scroll", handleScroll);
   });
 
-  const containerVariants = {
-    compact: {
-      zIndex: 1,
-      padding: "2rem",
-      position: "relative",
-    },
-    expanded: {
-      zIndex: 200,
-      padding: 0,
-      position: "absolute",
-    },
-  };
+  //console.log(breakpoint);
 
-  const cardVariants = {
-    compact: {
-      borderRadius: "1rem",
-      //position: "relative",
-      height: "70vh",
-    },
-    expanded: {
-      borderRadius: "0rem",
-      //position: "fixed",
-      height: "90vh",
-    }
-  };
+  const peekValuesMobile = [120];
+  const peekValuesDesktop = [230, 350, 190, 320];
+  const peekValues = breakpoint <= Breakpoint.md ? peekValuesMobile : peekValuesDesktop;
 
-  const onClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const mobileColors = [
-    '#5B5540',
-    '#3F1C2E',
-    '#1C3B3F',
-    '#553663',
-  ];
-
-  const desktopColors = [
-    '#202020',
-    '#202020',
-    '#202020',
-    '#202020',
-  ];
-
-  console.log(breakpoint);
-
-  const colors = (breakpoint > Breakpoint.md) ? desktopColors : mobileColors;
+  const modalTransition = {
+    type: "spring", 
+    mass: 0.4,
+  }
 
   return (
     <main className='overflow-y-scroll overflow-y-visible'>
@@ -84,16 +51,54 @@ export default function Home() {
       ref={ref}>
 
         <Cover/>
-        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Organon' span={1} peek={breakpoint <= Breakpoint.md ? 120 : 230} scrollOffset={scrollOffset}/>
-        <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 2' peek={breakpoint > Breakpoint.md ? 350 : undefined} scrollOffset={scrollOffset}/>
-        <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 3' peek={breakpoint > Breakpoint.md ? 190 : undefined} scrollOffset={scrollOffset}/>
-        <ProjectCard sceneLink="https://prod.spline.design/DjNz7uPVy3j74tvx/scene.splinecode" bgColor={colors[1]} title='Test 9' peek={breakpoint > Breakpoint.md ? 320 : undefined} scrollOffset={scrollOffset}/> 
-        <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 4' span={1}/>
-        <ProjectCard sceneLink="https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode" bgColor={colors[0]} title='Test 5' />
-        <ProjectCard sceneLink="https://prod.spline.design/aG9rfs8G5GCCXmGw/scene.splinecode" bgColor={colors[2]} title='Test 6'/>
-        <ProjectCard sceneLink="https://prod.spline.design/WZF9cCrorhf6cci9/scene.splinecode" bgColor={colors[3]} title='Test 7' span={1}/>
+        {
+          projects.map((data, index) => 
+            <ProjectCard 
+            key={index} 
+            projectInfo={data.info} 
+            breakpoint={breakpoint}
+            sceneUrl={data.sceneUrl}
+            coverUrl={data.coverUrl}
+            bgColor={data.color}
+            peek={peekValues.at(index)} 
+            scrollOffset={scrollOffset} 
+            onClick={(id) => setModalId(() => id)} />
+          )
+        }
 
       </motion.section>
+
+      <AnimatePresence> {
+        modalId &&
+        <div onClick={() => {setModalId(() => undefined)}} className='absolute top-0 z-10 bottom-0 left-0 right-0 bg-stone-900/80 flex px-0 lg:px-[15vw] justify-center backdrop-blur'>
+
+          <motion.section className={`relative flex flex-col gap-6 snap-center snap-always snap-mandatory w-full bg-stone-900`}
+          layout
+          layoutId={modalId}
+          transition={modalTransition}>
+
+            <motion.div
+            className={`w-full h-[70vh] items-center justify-between font-mono text-sm overflow-hidden relative`}
+            layout
+            layoutId={modalId+"cover"}
+            transition={modalTransition}>
+              <Image src={"/organon-cover.png"} layout="fill" objectFit="cover" alt="" className={`w-full h-full absolute`}/>
+              {/* <Spline scene={"https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode"} /> */}
+            </motion.div>
+
+            <div className='flex flex-col basis-1/6 px-6 z-10 gap-1'>
+                <motion.h1
+                className='text-lg font-medium tracking-widest uppercase'>{modalId}</motion.h1>
+                <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
+                <button onClick={() => setModalId(undefined)} className='text-sm w-fit font-normal p-2 px-4 rounded-full -ml-1.5 lg:ml-0 mt-4 underline-offset-4 bg-white text-stone-800 lg:bg-transparent lg:p-0 lg:px-0 lg:text-stone-50 lg:underline'>Close</button>
+            </div>
+
+        </motion.section>
+        </div>
+        
+
+      } </AnimatePresence>
+      
     
     </main>
     

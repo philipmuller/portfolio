@@ -12,8 +12,6 @@ const useScroll = (): ScrollPosition => {
     });
 
     const handleScroll = () => {
-        console.log("SCROLL");
-        console.log("scrolling"+window.scrollY);
         setScrollPosition({
             x: window.scrollX,
             y: window.scrollY,
@@ -21,7 +19,6 @@ const useScroll = (): ScrollPosition => {
     };
 
     useEffect(() => {
-        console.log("USE EFFECT");
         window.addEventListener("pageYOffset", handleScroll);
         return () => {
             window.removeEventListener("pageYOffset", handleScroll);
