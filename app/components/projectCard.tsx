@@ -27,10 +27,6 @@ export default function ProjectCard({ projectInfo, breakpoint, sceneUrl, coverUr
 
     //console.log("Title: " + projectInfo.title + " breakpoint: " + breakpoint + " color: " + color);
 
-    useEffect(() => {
-        setRenderIsVisible(() => isMobile ? true : false);
-    }, [isMobile])
-
     const peekOffset = () => {
         if (peek != undefined && scrollOffset != undefined && scrollOffset <= peek) {
             return -peek+scrollOffset;
