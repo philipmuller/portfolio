@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Inter, Hanken_Grotesk } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
+const hanken = Hanken_Grotesk({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -19,7 +20,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <meta name="theme-color" content={"#FFFFFF"} />
       <body className='overflow-y-scroll overflow-y-visible'>
-        <Navbar />
+        {/* <Navbar /> */}
         {children}
       </body>
     </html>

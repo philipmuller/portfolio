@@ -10,13 +10,16 @@ import Image from 'next/image';
 import { ProjectInfo } from './model/project-info';
 import { title } from 'process';
 import { projects } from './data'
+import Article from './components/article';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
 const ProjectCard = dynamic(() => import('./components/projectCard'));
 
 export default function Home() {
-  const [isExpanded, setIsExpanded] = useState(false);
   const breakpoint = useBreakpoints();
-  const [modalId, setModalId] = useState<string | undefined>(undefined);
+  const [expandedProjectInfo, setexpandedProjectInfo] = useState<ProjectInfo | undefined>(undefined);
 
   const [scrollOffset, setScrollOffset] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
@@ -38,11 +41,6 @@ export default function Home() {
   const peekValuesDesktop = [230, 350, 190, 320];
   const peekValues = breakpoint <= Breakpoint.md ? peekValuesMobile : peekValuesDesktop;
 
-  const modalTransition = {
-    type: "spring", 
-    mass: 0.4,
-  }
-
   return (
     <main className='overflow-y-scroll overflow-y-visible'>
       <motion.section 
@@ -55,45 +53,19 @@ export default function Home() {
           projects.map((data, index) => 
             <ProjectCard 
             key={index} 
-            projectInfo={data.info} 
+            projectInfo={data} 
             breakpoint={breakpoint}
-            sceneUrl={data.sceneUrl}
-            coverUrl={data.coverUrl}
-            bgColor={data.color}
-            peek={peekValues.at(index)} 
             scrollOffset={scrollOffset} 
-            onClick={(id) => setModalId(() => id)} />
+            onClick={(id) => setexpandedProjectInfo(() => data)} />
           )
         }
 
       </motion.section>
 
       <AnimatePresence> {
-        modalId &&
-        <div onClick={() => {setModalId(() => undefined)}} className='absolute top-0 z-10 bottom-0 left-0 right-0 bg-stone-900/80 flex px-0 lg:px-[15vw] justify-center backdrop-blur'>
-
-          <motion.section className={`relative flex flex-col gap-6 snap-center snap-always snap-mandatory w-full bg-stone-900`}
-          layout
-          layoutId={modalId}
-          transition={modalTransition}>
-
-            <motion.div
-            className={`w-full h-[70vh] items-center justify-between font-mono text-sm overflow-hidden relative`}
-            layout
-            layoutId={modalId+"cover"}
-            transition={modalTransition}>
-              <Image src={"/organon-cover.png"} layout="fill" objectFit="cover" alt="" className={`w-full h-full absolute`}/>
-              {/* <Spline scene={"https://prod.spline.design/vOTSy200mmfodOdw/scene.splinecode"} /> */}
-            </motion.div>
-
-            <div className='flex flex-col basis-1/6 px-6 z-10 gap-1'>
-                <motion.h1
-                className='text-lg font-medium tracking-widest uppercase'>{modalId}</motion.h1>
-                <p className='text-sm font-light opacity-80'>Write and learn formal logic like never before, designed for iPhone.</p>
-                <button onClick={() => setModalId(undefined)} className='text-sm w-fit font-normal p-2 px-4 rounded-full -ml-1.5 lg:ml-0 mt-4 underline-offset-4 bg-white text-stone-800 lg:bg-transparent lg:p-0 lg:px-0 lg:text-stone-50 lg:underline'>Close</button>
-            </div>
-
-        </motion.section>
+        expandedProjectInfo &&
+        <div onClick={() => {setexpandedProjectInfo(() => undefined)}} className='absolute h-screen top-0 z-10 bottom-0 left-0 right-0 bg-stone-900/90 flex px-0 lg:px-[10%] lg:py-10 justify-center backdrop-blur overflow-y-scroll'>
+          <Article projectInfo={expandedProjectInfo} onDismiss={() => setexpandedProjectInfo(undefined)}/>
         </div>
         
 

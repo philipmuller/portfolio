@@ -7,12 +7,9 @@ import Image from 'next/image';
 import { ProjectInfo } from '../model/project-info';
 import { Breakpoint } from '../hooks/useBreakpoints';
 
-export default function ProjectCard({ projectInfo, breakpoint, sceneUrl, coverUrl, bgColor, peek, scrollOffset, onClick, className } : { 
+export default function ProjectCard({ projectInfo, breakpoint, peek, scrollOffset, onClick, className } : { 
     projectInfo: ProjectInfo, 
     breakpoint: Breakpoint,
-    sceneUrl?: string,
-    coverUrl?: string,
-    bgColor?: string,   
     peek?: number, 
     scrollOffset?: number, 
     onClick?: (id: string) => void ,
@@ -23,7 +20,7 @@ export default function ProjectCard({ projectInfo, breakpoint, sceneUrl, coverUr
 
     const [renderIsVisible, setRenderIsVisible] = useState(false);
 
-    const color = !isMobile ? "#202020" : bgColor ?? "#202020";
+    const color = !isMobile ? "#202020" : projectInfo.color ?? "#202020";
 
     //console.log("Title: " + projectInfo.title + " breakpoint: " + breakpoint + " color: " + color);
 
@@ -49,14 +46,15 @@ export default function ProjectCard({ projectInfo, breakpoint, sceneUrl, coverUr
             layout layoutId={projectInfo.title+"cover"} animate={{y: peekOffset()}} 
             className={`w-full h-[72%] items-center justify-between font-mono text-sm overflow-hidden rounded-2xl relative`}>
                 <div className='w-full h-full absolute'/>
-                <Image src={coverUrl ?? ""} fill={true} objectFit="cover" alt="" className={`w-full h-full absolute ${renderIsVisible ? "animate-pulse" : ""}`}/>
-                {renderIsVisible && sceneUrl != undefined && 
-                <Spline scene={sceneUrl ?? ""} className='relative'/>}
+                <Image src={projectInfo.coverUrl ?? ""} fill={true} objectFit="cover" alt="" className={`w-full h-full absolute ${renderIsVisible ? "animate-pulse" : ""}`}/>
+                {renderIsVisible && projectInfo.sceneUrl != undefined && 
+                <Spline scene={projectInfo.sceneUrl ?? ""} className='relative'/>}
          
             </motion.div>
 
             <div className='flex flex-col basis-1/6 px-6 z-10 gap-1 animate-none transition-none'>
                 <motion.h1
+                layout layoutId={projectInfo.title+"title"}
                 onViewportEnter={() => {
                     const metaThemeColor = document.querySelector("meta[name=theme-color]");
                     //console.log(metaThemeColor);
