@@ -15,7 +15,7 @@ export default function Cover() {
 
     function handleChatSend(message: Message) {
         setLoading(true);
-        setMessages([...messages, message, {from: "bot", content: "..."}]);
+        setMessages([...messages, message, {from: "assistant", content: "..."}]);
     }
 
     return (

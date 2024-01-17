@@ -1,4 +1,4 @@
 export default interface Message {
-    from: "user" | "bot" | "human";
+    from: "user" | "assistant" | "human" | "function";
     content: string;
 }

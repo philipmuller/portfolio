@@ -24,7 +24,7 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
             content="I'm a product designer and developer working at the intersection of design and technology." 
             compact={messages.length > 0}/>
                 
-            { messages.map((message, index) => <Bubble key={index} mode={message.from} content={message.content}/>) }
+            { messages.map((message, index) => <Bubble key={index} message={message}/>) }
 
             <Chatbox onSubmit={onSubmit} loading={loading} placeholder={placeholderText ?? defaultPlaceholderText} horizontal={messages.length > 0}/>
 
