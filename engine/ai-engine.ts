@@ -11,7 +11,7 @@ import Message from "@/app/model/message";
 export class OpenAIEngine {
     logger: Logger = new Logger("OpenAIEngine");
     openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY!, dangerouslyAllowBrowser: false});
-    generalAssistantId: string = "asst_50XPjQkI94nTIPQo539HO54T";
+    generalAssistantId: string = "asst_1ZwvnjgVGL556TQdt3QEvkxy";
     model = "gpt-3.5-turbo";
     transcriptionModel = "whisper-1";
     checkIntervalMs = 1000;

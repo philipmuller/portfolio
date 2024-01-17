@@ -1,5 +1,6 @@
 import { useAnimate } from "framer-motion";
 import Logo from "./logo";
+import { useEffect } from "react";
 
 export default function PixelDisplay({loading, params} : {loading?: boolean, params?: { fillSequence?: string[], glowOpacitySequence?: number[], nextAt?: string | number }}) {
     const [scope, animate] = useAnimate();
@@ -41,15 +42,16 @@ export default function PixelDisplay({loading, params} : {loading?: boolean, par
         ["svg.ring8-glow", {opacity: glowOpacitySequence}, {at: "<"}],
     ];
 
-    if (loading) {
-        startLoadingAnimation();
-    }
-
-    function startLoadingAnimation() {
+    useEffect(() => {
         //@ts-ignore
-        animate(animationSequence, {duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatType: "loop", repeatDelay: 0});
-        //animate("svg.ring2-glow", {opacity: [0, 1, 0]});
-    }
+        const animationControls = animate(animationSequence, {duration: 1.5, ease: "easeInOut", repeat: Infinity, repeatType: "loop", repeatDelay: 0});
+
+        if (loading) {
+            animationControls.play();
+        } else {
+            animationControls.stop();
+        }
+    }, [loading]);
 
     return (
         <div ref={scope} className='basis-2/5 grid grid-cols-8 gap-6 fill-neutral-700 p-20'>

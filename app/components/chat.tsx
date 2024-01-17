@@ -9,6 +9,7 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
 
     const defaultPlaceholderText = "How can you help Apple as a software designer in the Shortcuts team?";
     const layoutTransition = {type: "spring", damping: 18, stiffness: 150};
+    const debugLayoutTransition = {type: "spring", damping: 60, stiffness: 50, duration: 5.0};
 
     function handleFormSubmit() {
         onSubmit({from: "user", content: "How can you help Apple as a software designer in the Shortcuts team?"});
@@ -20,11 +21,14 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
         whileInView={{ height: (messages.length > 0) ? "100%" : "fit-content" }}
         transition={layoutTransition}>
 
-            <InitialTextDisplayMessage title="Hi! I'm Philip" 
-            content="I'm a product designer and developer working at the intersection of design and technology." 
-            compact={messages.length > 0}/>
-                
-            { messages.map((message, index) => <Bubble key={index} message={message}/>) }
+            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start  overflow-scroll'>
+                { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
+
+                <InitialTextDisplayMessage title="Hi! I'm Philip" 
+                content="I'm a product designer and developer working at the intersection of design and technology." 
+                compact={messages.length > 0}/>
+
+            </motion.div>
 
             <Chatbox onSubmit={onSubmit} loading={loading} placeholder={placeholderText ?? defaultPlaceholderText} horizontal={messages.length > 0}/>
 
@@ -34,18 +38,27 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
 
 function Chatbox({ onSubmit, loading, placeholder, horizontal } : { onSubmit: (message: Message) => void, loading: boolean, placeholder?: string, horizontal?: boolean }) {
 
+    const [textAreaValue, setTextAreaValue] = useState("");
+
     const flexDirection = horizontal ? "flex-row" : "flex-col";
     const alignment = horizontal ? "items-end" : "items-start";
 
     function handleFormSubmit() {
-        onSubmit({from: "user", content: "How can you help Apple as a software designer in the Shortcuts team?"});
+        let message = (textAreaValue == "" && !horizontal) ? placeholder ?? "" : textAreaValue; //this is horrible
+        onSubmit({from: "user", content: message});
+        setTextAreaValue("");
+    }
+
+    function handleTextareaChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        console.log(event.target.value);
+        setTextAreaValue(event.target.value);
     }
 
     return (
         <form className={`flex ${flexDirection} ${alignment} gap-5 mt-6 relative`}>
 
                     <motion.textarea layout className='text-stone-200 relative placeholder-stone-500 font-light rounded-xl p-4 bg-neutral-800 resize-none w-full h-20'
-                    name="question" id="qs" 
+                    name="question" id="qs" value={textAreaValue} onChange={handleTextareaChange}
                     placeholder={placeholder} />
 
                     <AskButton loading={loading} compact={horizontal ?? false} onClick={handleFormSubmit}/>
@@ -63,9 +76,9 @@ function AskButton({ loading, compact, onClick } : { loading: boolean, compact: 
             width: "8rem",
         },
         default: {
-            borderRadius: loading ? "500rem" : "0.75rem",
-            height: loading ? "2.5rem" : "3rem",
-            width: loading ? "2.5rem" : "8rem",
+            borderRadius: compact ? "500rem" : "0.75rem",
+            height: compact ? "2.5rem" : "3rem",
+            width: compact ? "2.5rem" : "8rem",
         }
     }
     const animation = "";//loading ? "animate-ping" : "";
