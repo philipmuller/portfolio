@@ -44,7 +44,7 @@ export default function Home() {
   return (
     <main className='overflow-y-scroll overflow-y-visible'>
       <motion.section 
-      className='grid bg-stone-900 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-2 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll overflow-y-visible' 
+      className='grid bg-stone-900 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-4 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll overflow-y-visible' 
       layout
       ref={ref}>
 
