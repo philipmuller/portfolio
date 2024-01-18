@@ -26,7 +26,7 @@ export default function Home() {
 
   const handleScroll = useCallback( (ev: Event) => {
     const target = ev.target as HTMLDivElement;
-    setScrollOffset(() => target.scrollTop)
+    setScrollOffset((prev) => target.scrollLeft);
   }, []);
 
   useEffect(() => {
@@ -42,13 +42,17 @@ export default function Home() {
   const peekValues = breakpoint <= Breakpoint.md ? peekValuesMobile : peekValuesDesktop;
 
   return (
-    <main className='overflow-y-scroll overflow-y-visible'>
+    <main className='overflow-x-scroll overflow-y-hidden flex flex-row gap-5 h-[100svh] bg-stone-900' ref={ref}>
       <motion.section 
-      className='grid bg-stone-900 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-4 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll overflow-y-visible' 
-      layout
-      ref={ref}>
+      className='aboutMeContainer min-w-[100svw] grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 items-center gap-0 lg:gap-4 h-[100svh] p-0 lg:p-2 snap-y snap-mandatory lg:snap-none overflow-y-scroll overflow-x-hidden' 
+      layout>
 
         <Cover/>
+
+      </motion.section>
+
+      <section className='projectsContainer relative flex flex-row height-full gap-5 min-w-fit items-center'>
+        <motion.h1 initial={{ x: 0}} animate={{x: -scrollOffset/2}}  transition={{type: "tween"}} className='absolute -top-96 text-stone-800 left-[80rem] font-semibold text-[38rem] '>Projects</motion.h1>
         {
           projects.map((data, index) => 
             <ProjectCard 
@@ -59,8 +63,7 @@ export default function Home() {
             onClick={(id) => setexpandedProjectInfo(() => data)} />
           )
         }
-
-      </motion.section>
+      </section>
 
       <AnimatePresence> {
         expandedProjectInfo &&

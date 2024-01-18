@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <meta name="theme-color" content={"#FFFFFF"} />
       <body className='overflow-y-scroll overflow-y-visible'>
-        {/* <Navbar /> */}
+        <Navbar />
         {children}
       </body>
     </html>

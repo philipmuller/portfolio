@@ -20,7 +20,7 @@ export default function ProjectCard({ projectInfo, breakpoint, peek, scrollOffse
 
     const [renderIsVisible, setRenderIsVisible] = useState(false);
 
-    const color = !isMobile ? "#202020" : projectInfo.color ?? "#202020";
+    const color = !isMobile ? "#20202000" : projectInfo.color ?? "#202020";
 
     //console.log("Title: " + projectInfo.title + " breakpoint: " + breakpoint + " color: " + color);
 
@@ -33,7 +33,7 @@ export default function ProjectCard({ projectInfo, breakpoint, peek, scrollOffse
     };
 
     return (
-        <motion.section className={`w-full h-[100svh] lg:h-[80svh] lg:rounded-xl flex flex-col gap-6 snap-center snap-always snap-mandatory px-8 pb-8 pt-16 relative ${className ?? ""}`}
+        <motion.section className={`w-[28rem] h-[100svh] lg:h-[80svh] lg:rounded-xl flex flex-col gap-6 snap-center snap-always snap-mandatory px-8 pb-8 pt-16 relative ${className ?? ""}`}
         layout
         animate={{backgroundColor: color}}
         layoutId={projectInfo.title}
