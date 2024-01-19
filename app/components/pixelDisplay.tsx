@@ -65,10 +65,16 @@ export default function PixelDisplay({loading, params} : {loading?: boolean, par
                             if (ring.find((value, _) => (x == value[0] && y == value[1])) != undefined) { customClassLabel = `ring${ringIndex}` }
                         });
 
-                        return <div key={index} className={`relative something w-full h-full p-1 ${(x == 5 && y == 7) ? "fill-white" : ""}`} style={{transform: `rotateZ(${(y+x)*30}deg)`}}>
-                            <Logo className={`${customClassLabel}-glow w-full h-full absolute fill-white blur-lg p-1 top-0 left-0 -z-10 ${(x == 5 && y == 7) ? "opacity-100" : "opacity-0"}`}/>
-                            <Logo className={`${customClassLabel} w-full h-full`}/>
-                            </div>;
+                        return (
+                            <div key={index} className={`relative something w-full h-full p-1 ${(x == 5 && y == 7) ? "fill-white" : ""}`}>
+                                <Logo className={`${customClassLabel} peer w-full h-full hover:scale-125 hover:fill-white duration-200 transition-all`} style={{transform: `rotateZ(${(y+x)*30}deg)`}}/>
+                                <Logo className={`${customClassLabel}-glow pointer-events-none w-full h-full absolute fill-white blur-lg p-1 top-0 left-0 ${(x == 5 && y == 7) ? "opacity-100" : "opacity-0"} peer-hover:opacity-100`} style={{transform: `rotateZ(${(y+x)*30}deg)`}}/>
+                                <div className="pointer-events-none absolute flex flex-row overflow-visible content-center items-end justify-center w-1 h-1 text-sm bg-red-500 transition-all peer-hover:-translate-y-6 left-0 right-0 top-2 ml-auto mr-auto invisible peer-hover:visible z-10">
+                                    <h2 className="w-fit min-w-fit text-sm p-3 bg-stone-800 rounded text-center z-10">Description of the skill</h2>
+                                </div>
+                                
+                            </div>
+                        );
                     })
                 }  
             </div>
