@@ -50,6 +50,21 @@ export default function PixelDisplay({
   };
 
   //prettier-ignore
+  const skills =
+    ["Davinci Resolve", "SQL", "Supabase", "NextJS", "MVC", "OOP", "Git", "Github",
+    "Rive", "Adobe After Effects", "C++", "React", "Typescript", "Javascript", "Development", "Testing",
+    "Motion Design", "Blender", "Adobe InDesign", "OpenAI API", "Java", "Objective-C", "XCode", "VSCode",
+    "Branding", "Logo Design", "Gestalt Principles", "Webflow", "Dart", "Swift", "UIKit", "Linear",
+    "Layout Design", "Visual Design", "Conceptual Minimalism", "Framer", "Flutter", "SwiftUI", "Project Management", "Collaboration",
+    "Affinity Designer", "Adobe Photoshop", "Adobe Illustrator", "Origami Studio", "Play", "Figma", "Diary Studies", "Field Studies",
+    "Affinity Photo", "Affinity Publisher", "Tea", "Hobbies", "Protopie", "UI/UX Design", "Human-Centered Design", "Interviews",
+    "CAD Drawing", "Spline", "Rhinoceros", "Magic", "Market Analysis", "Product Design", "HCI", "Descriptive Statistics",
+    "NURBS Modeling", "Industrial Design", "Design History", "Reading", "Storytelling", "Design Thinking", "Academic Research", "Affinity Diagramming",
+    "Polygon Modeling", "Rapid Iterative Prototyping", "3D Printing", "Philosophy", "Field Recording", "Usability Studies", "Focus Groups", "Survey Studies",
+    "Raspberry Pi", "Electronics", "D&D", "Mixing", "Sound Design", "German", "Google Forms", "Typeform",
+    "Soldering", "Arduino", "Board Games", "Reaper", "English", "Italian", "Slovenian", "Languages"];
+
+  //prettier-ignore
   const loadingAnimationRings = [
     [[5, 7]],
     [[5, 6], [5, 8], [4, 6], [4, 8], [6, 6], [6, 8], [4, 7], [6, 7]],
@@ -170,7 +185,7 @@ export default function PixelDisplay({
       ref={scope}
       className="grid basis-2/5 grid-cols-8 gap-6 fill-neutral-800 p-20"
     >
-      {Array.from(Array(96)).map((_, index) => {
+      {skills.map((skill, index) => {
         const x = index % 8;
         const y = Math.floor(index / 8);
 
@@ -218,7 +233,7 @@ export default function PixelDisplay({
               variants={descriptionVariants}
             >
               <h2 className="z-10 w-fit min-w-fit rounded bg-stone-800 p-3 text-center text-sm">
-                Description of the skill
+                {skill}
               </h2>
             </motion.div>
           </motion.div>
