@@ -1,6 +1,12 @@
-import { useAnimate, motion, stagger } from "framer-motion";
+import {
+  useAnimate,
+  motion,
+  stagger,
+  AnimationPlaybackControls,
+  AnimationControls,
+} from "framer-motion";
 import { MotionLogo } from "./logo";
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function PixelDisplay({
   loading,
@@ -14,6 +20,18 @@ export default function PixelDisplay({
   };
 }) {
   const [scope, animate] = useAnimate();
+  const loadingAnimationControlsRef = useRef<
+    AnimationPlaybackControls | undefined
+  >(undefined);
+  const idleAnimationControlsRef = useRef<
+    AnimationPlaybackControls | undefined
+  >(undefined);
+  const [hoveringSkill, setIsHoveringSkill] = useState<string | undefined>(
+    undefined,
+  );
+  const [hoveringAreaIdx, setHoveringAreaIdx] = useState<number | undefined>(
+    undefined,
+  );
 
   const logoContainerVariants = {
     idle: {},
@@ -21,9 +39,9 @@ export default function PixelDisplay({
   };
 
   const logoVariants = {
-    idle: {
-      fill: "#262626",
-    },
+    idle: (areaIdx: number) => ({
+      fill: areaIdx == hoveringAreaIdx ? "#FFFFFF" : "#262626",
+    }),
     hover: {
       fill: "#FFFFFF",
     },
@@ -128,57 +146,161 @@ export default function PixelDisplay({
     ["svg.ring8-glow", { opacity: glowOpacitySequence }, { at: "<" }],
   ];
 
-  function idleAreaSequenceBuilder(areaIDs: string[]) {
+  function areaGlowSequenceBuilder(
+    areaIDs: string[],
+    style: "presentation" | "hover" = "presentation",
+  ) {
     const mainLogoSelector = "svg." + areaIDs[0];
     const mainLogoGlowSelector = mainLogoSelector + "-glow";
     const associatedSkillsSelector = "svg." + areaIDs[1];
     const associatedSkillsGlowSelector = associatedSkillsSelector + "-glow";
+
+    function presentationStyleSequence() {
+      //prettier-ignore
+      return [
+        [mainLogoSelector, { fill: ["#262626", "#FFFFFF"] }],
+        [mainLogoGlowSelector, { opacity: [0, 0.6] }, { at: "<" }],
+        [associatedSkillsSelector, { fill: ["#262626", "#999999"] }, { delay: stagger(0.02, { from: "center" }) }],
+        [associatedSkillsGlowSelector, { opacity: [0, 0.1] }, { at: "<", delay: stagger(0.02, { from: "center" }) }],
+        [associatedSkillsSelector, { fill: ["#999999", "#262626"] }],
+        [associatedSkillsGlowSelector, { opacity: [0.1, 0.0] }, { at: "<" }],
+        [mainLogoSelector, { fill: ["#FFFFFF", "#262626"] }, { at: "-0.2" }],
+        [mainLogoGlowSelector, { opacity: [0.6, 0] }, { at: "<" }],
+      ];
+    }
+
+    function hoverStyleSequence() {
+      //prettier-ignore
+      return [
+        [mainLogoSelector, { fill: ["#262626", "#FFFFFF"] }],
+        [mainLogoGlowSelector, { opacity: [0, 0.6] }, { at: "<" }],
+        [associatedSkillsSelector, { fill: ["#262626", "#999999"] }, { at: "<" }],
+        [associatedSkillsGlowSelector, { opacity: [0, 0.1] }, { at: "<" }],
+      ];
+    }
     //prettier-ignore
-    return [
-      [mainLogoSelector, { fill: ["#262626", "#FFFFFF"] }],
-      [mainLogoGlowSelector, { opacity: [0, 0.6] }, { at: "<" }],
-      [associatedSkillsSelector, { fill: ["#262626", "#999999"] }, { delay: stagger(0.02, { from: "center" }) }],
-      [associatedSkillsGlowSelector, { opacity: [0, 0.1] }, { at: "<", delay: stagger(0.02, { from: "center" }) }],
-      [associatedSkillsSelector, { fill: ["#999999", "#262626"] }],
-      [associatedSkillsGlowSelector, { opacity: [0.1, 0.0] }, { at: "<" }],
-      [mainLogoSelector, { fill: ["#FFFFFF", "#262626"] }, { at: "-0.2" }],
-      [mainLogoGlowSelector, { opacity: [0.6, 0] }, { at: "<" }],
-    ]
+    return style == "presentation" ? presentationStyleSequence() : hoverStyleSequence();
   }
 
-  //prettier-ignore
-  const idleAnimationSequence = [
-    ...idleAreaSequenceBuilder(["area0", "area1"]),
-    ...idleAreaSequenceBuilder(["area2", "area3"]),
-    ...idleAreaSequenceBuilder(["area4", "area5"]),
-    ...idleAreaSequenceBuilder(["area6", "area7"]),
-    ...idleAreaSequenceBuilder(["area8", "area9"]),
-    ...idleAreaSequenceBuilder(["area10", "area11"]),
-    ...idleAreaSequenceBuilder(["area12", "area13"]),
-    ...idleAreaSequenceBuilder(["area14", "area15"]),
-    ...idleAreaSequenceBuilder(["area16", "area17"]),
+  const resetSequence = [
+    ["svg.area0", { fill: "#262626" }],
+    ["svg.area0-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area1", { fill: "#262626" }, { at: "<" }],
+    ["svg.area1-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area2", { fill: "#262626" }, { at: "<" }],
+    ["svg.area2-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area3", { fill: "#262626" }, { at: "<" }],
+    ["svg.area3-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area4", { fill: "#262626" }, { at: "<" }],
+    ["svg.area4-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area5", { fill: "#262626" }, { at: "<" }],
+    ["svg.area5-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area6", { fill: "#262626" }, { at: "<" }],
+    ["svg.area6-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area7", { fill: "#262626" }, { at: "<" }],
+    ["svg.area7-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area8", { fill: "#262626" }, { at: "<" }],
+    ["svg.area8-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area9", { fill: "#262626" }, { at: "<" }],
+    ["svg.area9-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area10", { fill: "#262626" }, { at: "<" }],
+    ["svg.area10-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area11", { fill: "#262626" }, { at: "<" }],
+    ["svg.area11-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area12", { fill: "#262626" }, { at: "<" }],
+    ["svg.area12-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area13", { fill: "#262626" }, { at: "<" }],
+    ["svg.area13-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area14", { fill: "#262626" }, { at: "<" }],
+    ["svg.area14-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area15", { fill: "#262626" }, { at: "<" }],
+    ["svg.area15-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area16", { fill: "#262626" }, { at: "<" }],
+    ["svg.area16-glow", { opacity: 0 }, { at: "<" }],
+    ["svg.area17", { fill: "#262626" }, { at: "<" }],
+    ["svg.area17-glow", { opacity: 0 }, { at: "<" }],
   ];
+
+  const idleAnimationSequence = [
+    ...areaGlowSequenceBuilder(["area0", "area1"]),
+    ...areaGlowSequenceBuilder(["area2", "area3"]),
+    ...areaGlowSequenceBuilder(["area4", "area5"]),
+    ...areaGlowSequenceBuilder(["area6", "area7"]),
+    ...areaGlowSequenceBuilder(["area8", "area9"]),
+    ...areaGlowSequenceBuilder(["area10", "area11"]),
+    ...areaGlowSequenceBuilder(["area12", "area13"]),
+    ...areaGlowSequenceBuilder(["area14", "area15"]),
+    ...areaGlowSequenceBuilder(["area16", "area17"]),
+  ];
+
+  function startLoadingAnimation() {
+    console.log("startLoadingAnimation");
+    console.log("loadingAnimationControlsRef = ", loadingAnimationControlsRef);
+    console.log("idleAnimationControlsRef = ", loadingAnimationControlsRef);
+    startResetAnimation();
+    //@ts-ignore
+    let loadingAC = animate(loadingAnimationSequence, {
+      duration: 1.5,
+      ease: "easeInOut",
+      repeat: Infinity,
+      repeatType: "loop",
+      repeatDelay: 0,
+    });
+  }
+
+  function startIdleAnimation() {
+    console.log("startIdleAnimation");
+    console.log("loadingAnimationControlsRef = ", loadingAnimationControlsRef);
+    console.log("idleAnimationControlsRef = ", loadingAnimationControlsRef);
+    startResetAnimation();
+    //@ts-ignore
+    let idleAC = animate(idleAnimationSequence, {
+      duration: 40.0,
+      ease: "easeInOut",
+      repeat: Infinity,
+      repeatType: "loop",
+      repeatDelay: 0,
+    });
+  }
+
+  function startHoverAnimation() {
+    console.log("startHoverAnimation");
+    console.log("loadingAnimationControlsRef = ", loadingAnimationControlsRef);
+    console.log("idleAnimationControlsRef = ", loadingAnimationControlsRef);
+    startResetAnimation();
+    let hoverAC = animate(
+      [
+        ...areaGlowSequenceBuilder(
+          ["area" + hoveringAreaIdx!, "area" + hoveringAreaIdx! + 1],
+          "hover",
+        ),
+      ],
+      {
+        duration: 1.0,
+        ease: "easeInOut",
+      },
+    );
+  }
+
+  function startResetAnimation() {
+    //@ts-ignore
+    animate(resetSequence, {
+      duration: 0.1,
+      ease: "easeInOut",
+    });
+  }
+
   useEffect(() => {
     if (loading) {
-      //@ts-ignore
-      animate(loadingAnimationSequence, {
-        duration: 1.5,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "loop",
-        repeatDelay: 0,
-      });
+      startLoadingAnimation();
     } else {
-      //@ts-ignore
-      animate(idleAnimationSequence, {
-        duration: 40.0,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "loop",
-        repeatDelay: 0,
-      });
+      if (hoveringAreaIdx == undefined) {
+        startIdleAnimation();
+      } else {
+        startHoverAnimation();
+      }
     }
-  }, [loading]);
+  }, [loading, hoveringAreaIdx]);
 
   return (
     <div
@@ -199,11 +321,13 @@ export default function PixelDisplay({
         });
 
         var labelsArray: string[] = [];
+        var areaIdx: number | undefined = undefined;
         idleAnimationAreas.forEach((area, areaIndex) => {
           if (
             area.find((value, _) => x == value[0] && y == value[1]) != undefined
           ) {
             labelsArray.push(`area${areaIndex}`);
+            areaIdx = areaIndex;
           }
         });
 
@@ -214,11 +338,22 @@ export default function PixelDisplay({
           <motion.div
             variants={logoContainerVariants}
             initial="idle"
+            onHoverStart={() => {
+              setIsHoveringSkill(skill);
+              setHoveringAreaIdx(areaIdx);
+              console.log("hovering area idx", areaIdx);
+            }}
+            onHoverEnd={() => {
+              setIsHoveringSkill(undefined);
+              setHoveringAreaIdx(undefined);
+              console.log("Stopped hovering");
+            }}
             whileHover={loading ? "" : "hover"}
             key={index}
             className={`relative h-full w-full p-1`}
           >
             <MotionLogo
+              custom={5}
               className={`${customClassLabel} ${secondCustomClassLabel} h-full w-full`}
               variants={logoVariants}
               style={{ rotateZ: (y + x) * 30 }}
@@ -239,6 +374,9 @@ export default function PixelDisplay({
           </motion.div>
         );
       })}
+
+      <button onClick={startLoadingAnimation}>Loading</button>
+      <button onClick={startIdleAnimation}>Idle</button>
     </div>
   );
 }
