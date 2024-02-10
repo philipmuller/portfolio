@@ -374,9 +374,6 @@ export default function PixelDisplay({
           </motion.div>
         );
       })}
-
-      <button onClick={startLoadingAnimation}>Loading</button>
-      <button onClick={startIdleAnimation}>Idle</button>
     </div>
   );
 }
