@@ -1,11 +1,6 @@
-import {
-  useAnimate,
-  motion,
-  stagger,
-  AnimationPlaybackControls,
-} from "framer-motion";
+import { useAnimate, motion, stagger } from "framer-motion";
 import { MotionLogo } from "./logo";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function PixelDisplay({
   loading,
@@ -25,6 +20,10 @@ export default function PixelDisplay({
   const [hoveringAreaIdx, setHoveringAreaIdx] = useState<number | undefined>(
     undefined,
   );
+  const [hoveringDisplayArea, setHoveringDisplayArea] = useState(false);
+  const [prevHoveringAreaIdx, setPrevHoveringAreaIdx] = useState<
+    number | undefined
+  >(undefined);
 
   const logoContainerVariants = {
     idle: {},
@@ -33,19 +32,21 @@ export default function PixelDisplay({
 
   const logoVariants = {
     idle: (areaIdx: number) => ({
-      fill: areaIdx == hoveringAreaIdx ? "#999999" : "#262626",
+      //fill: "#262626",
+      scale: 1.0,
     }),
     hover: {
-      fill: "#FFFFFF",
+      //fill: "#FFFFFF",
+      scale: 1.1,
     },
   };
 
   const logoShadowVariants = {
     idle: {
-      opacity: 0.0,
+      //opacity: 0.0,
     },
     hover: {
-      opacity: 1.0,
+      //opacity: 1.0,
     },
   };
 
@@ -137,12 +138,12 @@ export default function PixelDisplay({
   }
 
   function areaGlowSequenceBuilder(
-    areaIDs: string[],
+    areaIDs: number[],
     style: "presentation" | "hover" = "presentation",
   ) {
-    const mainLogoSelector = "svg." + areaIDs[0];
+    const mainLogoSelector = "svg.area" + areaIDs[0];
     const mainLogoGlowSelector = mainLogoSelector + "-glow";
-    const associatedSkillsSelector = "svg." + areaIDs[1];
+    const associatedSkillsSelector = "svg.area" + areaIDs[1];
     const associatedSkillsGlowSelector = associatedSkillsSelector + "-glow";
 
     const fromColor = baseColor;
@@ -168,6 +169,7 @@ export default function PixelDisplay({
     }
 
     function hoverStyleSequence() {
+      const isEven = areaIDs[0] % 2 == 0;
       //prettier-ignore
       return [
         [mainLogoSelector, { fill: [fromColor, toColorMain] }],
@@ -196,17 +198,12 @@ export default function PixelDisplay({
     ]);
   }
 
-  const idleAnimationSequence = [
-    ...areaGlowSequenceBuilder(["area0", "area1"]),
-    ...areaGlowSequenceBuilder(["area2", "area3"]),
-    ...areaGlowSequenceBuilder(["area4", "area5"]),
-    ...areaGlowSequenceBuilder(["area6", "area7"]),
-    ...areaGlowSequenceBuilder(["area8", "area9"]),
-    ...areaGlowSequenceBuilder(["area10", "area11"]),
-    ...areaGlowSequenceBuilder(["area12", "area13"]),
-    ...areaGlowSequenceBuilder(["area14", "area15"]),
-    ...areaGlowSequenceBuilder(["area16", "area17"]),
-  ];
+  let idleAnimationSequence: {}[] = [];
+  for (let i = 0; i < 18; i++) {
+    if (i % 2 == 0) {
+      idleAnimationSequence.push(...areaGlowSequenceBuilder([i, i + 1]));
+    }
+  }
 
   function startLoadingAnimation() {
     console.log("startLoadingAnimation");
@@ -234,21 +231,21 @@ export default function PixelDisplay({
     });
   }
 
-  function startHoverAnimation() {
+  function startHoverAnimation(areaIdx: number) {
     console.log("startHoverAnimation");
     startResetAnimation();
-    animate(
-      [
-        ...areaGlowSequenceBuilder(
-          ["area" + hoveringAreaIdx!, "area" + hoveringAreaIdx! + 1],
-          "hover",
-        ),
-      ],
-      {
-        duration: 1.0,
-        ease: "easeInOut",
-      },
-    );
+
+    const isEven = areaIdx % 2 == 0;
+
+    const associatedAreaIdx = isEven ? areaIdx + 1 : areaIdx - 1;
+
+    const first = isEven ? areaIdx : associatedAreaIdx;
+    const second = isEven ? associatedAreaIdx : areaIdx;
+
+    animate([...areaGlowSequenceBuilder([first, second], "hover")], {
+      duration: 1.0,
+      ease: "easeInOut",
+    });
   }
 
   function startResetAnimation() {
@@ -262,23 +259,32 @@ export default function PixelDisplay({
   useEffect(() => {
     if (loading) {
       startLoadingAnimation();
+    } else {
+      startIdleAnimation();
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (!loading) {
-      if (hoveringAreaIdx == undefined) {
-        startIdleAnimation();
-      } else {
-        startHoverAnimation();
-      }
-    }
-  }, [hoveringAreaIdx]);
+  // useEffect(() => {
+  //   if (!loading) {
+  //     if (hoveringAreaIdx == undefined) {
+  //       startIdleAnimation();
+  //     } else {
+  //       startHoverAnimation();
+  //     }
+  //   }
+  // }, [hoveringAreaIdx]);
 
   return (
-    <div
+    <motion.div
       ref={scope}
       className="grid basis-2/5 grid-cols-8 gap-6 fill-neutral-800 p-20"
+      onHoverStart={() => {
+        setHoveringDisplayArea(true);
+      }}
+      onHoverEnd={() => {
+        setHoveringDisplayArea(false);
+        startIdleAnimation();
+      }}
     >
       {skills.map((skill, index) => {
         const x = index % 8;
@@ -314,11 +320,15 @@ export default function PixelDisplay({
             onHoverStart={() => {
               setIsHoveringSkill(skill);
               setHoveringAreaIdx(areaIdx);
+              if (areaIdx != prevHoveringAreaIdx) {
+                startHoverAnimation(areaIdx!);
+              }
               console.log("hovering area idx", areaIdx);
             }}
             onHoverEnd={() => {
               setIsHoveringSkill(undefined);
               setHoveringAreaIdx(undefined);
+              setPrevHoveringAreaIdx(areaIdx);
               console.log("Stopped hovering");
             }}
             whileHover={loading ? "" : "hover"}
@@ -347,6 +357,6 @@ export default function PixelDisplay({
           </motion.div>
         );
       })}
-    </div>
+    </motion.div>
   );
 }
