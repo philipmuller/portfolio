@@ -7,14 +7,14 @@ import { ArrowUp, Square } from "@phosphor-icons/react";
 
 export default function Chat({ messages, onSubmit, loading, placeholderText } : { messages: Message[], onSubmit: (message: Message) => void, loading: boolean, placeholderText?: string }) {
 
-    const defaultPlaceholderText = "How can you help Apple as a software designer in the Shortcuts team?";
+    const defaultPlaceholderText = "What is your design philosophy?";
     const layoutTransition = {type: "spring", damping: 18, stiffness: 150};
     const debugLayoutTransition = {type: "spring", damping: 60, stiffness: 50, duration: 5.0};
 
     function handleFormSubmit() {
         onSubmit({from: "user", content: "How can you help Apple as a software designer in the Shortcuts team?"});
     }
-    
+
     return (
         <motion.div className='flex flex-col gap-2 w-full justify-end'
         initial={{ height: "fit-content" }}
@@ -24,8 +24,8 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
             <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start  overflow-scroll'>
                 { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
 
-                <InitialTextDisplayMessage title="Hi! I'm Philip" 
-                content="I'm a product designer and developer working at the intersection of design and technology." 
+                <InitialTextDisplayMessage title="Hi! I'm Philip"
+                content="I'm a product designer and developer working at the intersection of design and technology."
                 compact={messages.length > 0}/>
 
             </motion.div>

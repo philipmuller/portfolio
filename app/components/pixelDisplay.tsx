@@ -277,7 +277,7 @@ export default function PixelDisplay({
   return (
     <motion.div
       ref={scope}
-      className="grid basis-2/5 grid-cols-8 gap-6 fill-neutral-800 p-20"
+      className="grid basis-2/5 grid-cols-8 gap-5 fill-neutral-800 p-20"
       onHoverStart={() => {
         setHoveringDisplayArea(true);
       }}
