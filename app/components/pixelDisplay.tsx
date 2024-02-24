@@ -235,17 +235,21 @@ export default function PixelDisplay({
     console.log("startHoverAnimation");
     startResetAnimation();
 
-    const isEven = areaIdx % 2 == 0;
+    const associatedAreaIdx = associatedAreaIndex(areaIdx);
 
-    const associatedAreaIdx = isEven ? areaIdx + 1 : areaIdx - 1;
-
-    const first = isEven ? areaIdx : associatedAreaIdx;
-    const second = isEven ? associatedAreaIdx : areaIdx;
+    const first = areaIdx % 2 == 0 ? areaIdx : associatedAreaIdx;
+    const second = areaIdx % 2 == 0 ? associatedAreaIdx : areaIdx;
 
     animate([...areaGlowSequenceBuilder([first, second], "hover")], {
       duration: 1.0,
       ease: "easeInOut",
     });
+  }
+
+  function associatedAreaIndex(idx: number | undefined): number | undefined {
+    if (idx === undefined) return undefined;
+
+    return idx % 2 == 0 ? idx + 1 : idx - 1;
   }
 
   function startResetAnimation() {
@@ -312,9 +316,16 @@ export default function PixelDisplay({
             onHoverStart={() => {
               setIsHoveringSkill(skill);
               setHoveringAreaIdx(areaIdx);
-              if (areaIdx != prevHoveringAreaIdx) {
+
+              const prevRelatedAreaIdx =
+                associatedAreaIndex(prevHoveringAreaIdx);
+              if (
+                areaIdx != prevHoveringAreaIdx &&
+                prevRelatedAreaIdx != areaIdx
+              ) {
                 startHoverAnimation(areaIdx!);
               }
+
               console.log("hovering area idx", areaIdx);
             }}
             onHoverEnd={() => {
