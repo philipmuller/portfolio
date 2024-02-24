@@ -256,6 +256,7 @@ export default function PixelDisplay({
     });
   }
 
+  //this useEffect is used to switch between loading and idle animations
   useEffect(() => {
     if (loading) {
       startLoadingAnimation();
@@ -263,16 +264,6 @@ export default function PixelDisplay({
       startIdleAnimation();
     }
   }, [loading]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     if (hoveringAreaIdx == undefined) {
-  //       startIdleAnimation();
-  //     } else {
-  //       startHoverAnimation();
-  //     }
-  //   }
-  // }, [hoveringAreaIdx]);
 
   return (
     <motion.div
@@ -283,6 +274,7 @@ export default function PixelDisplay({
       }}
       onHoverEnd={() => {
         setHoveringDisplayArea(false);
+        setPrevHoveringAreaIdx(undefined);
         startIdleAnimation();
       }}
     >
