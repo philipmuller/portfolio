@@ -270,96 +270,100 @@ export default function PixelDisplay({
   }, [loading]);
 
   return (
-    <motion.div
-      ref={scope}
-      className="grid basis-2/5 grid-cols-8 gap-5 fill-neutral-800 p-20"
-      onHoverStart={() => {
-        setHoveringDisplayArea(true);
-      }}
-      onHoverEnd={() => {
-        setHoveringDisplayArea(false);
-        setPrevHoveringAreaIdx(undefined);
-        startIdleAnimation();
-      }}
-    >
-      {skills.map((skill, index) => {
-        const x = index % 8;
-        const y = Math.floor(index / 8);
+    <div className="basis-2/5 p-20">
+      <motion.div
+        ref={scope}
+        className="grid grid-cols-8 gap-5 fill-neutral-800"
+        onHoverStart={() => {
+          setHoveringDisplayArea(true);
+        }}
+        onHoverEnd={() => {
+          setHoveringDisplayArea(false);
+          setPrevHoveringAreaIdx(undefined);
+          startIdleAnimation();
+        }}
+      >
+        {skills.map((skill, index) => {
+          const x = index % 8;
+          const y = Math.floor(index / 8);
 
-        let customClassLabel = "";
-        loadingAnimationRings.forEach((ring, ringIndex) => {
-          if (
-            ring.find((value, _) => x == value[0] && y == value[1]) != undefined
-          ) {
-            customClassLabel = `ring${ringIndex}`;
-          }
-        });
+          let customClassLabel = "";
+          loadingAnimationRings.forEach((ring, ringIndex) => {
+            if (
+              ring.find((value, _) => x == value[0] && y == value[1]) !=
+              undefined
+            ) {
+              customClassLabel = `ring${ringIndex}`;
+            }
+          });
 
-        var labelsArray: string[] = [];
-        var areaIdx: number | undefined = undefined;
-        idleAnimationAreas.forEach((area, areaIndex) => {
-          if (
-            area.find((value, _) => x == value[0] && y == value[1]) != undefined
-          ) {
-            labelsArray.push(`area${areaIndex}`);
-            areaIdx = areaIndex;
-          }
-        });
+          var labelsArray: string[] = [];
+          var areaIdx: number | undefined = undefined;
+          idleAnimationAreas.forEach((area, areaIndex) => {
+            if (
+              area.find((value, _) => x == value[0] && y == value[1]) !=
+              undefined
+            ) {
+              labelsArray.push(`area${areaIndex}`);
+              areaIdx = areaIndex;
+            }
+          });
 
-        const secondCustomClassLabel = labelsArray.join(" ");
-        const areaGlowCustomLabel = labelsArray.join("-glow ") + "-glow";
+          const secondCustomClassLabel = labelsArray.join(" ");
+          const areaGlowCustomLabel = labelsArray.join("-glow ") + "-glow";
 
-        return (
-          <motion.div
-            variants={logoContainerVariants}
-            initial="idle"
-            onHoverStart={() => {
-              setIsHoveringSkill(skill);
-              setHoveringAreaIdx(areaIdx);
-
-              const prevRelatedAreaIdx =
-                associatedAreaIndex(prevHoveringAreaIdx);
-              if (
-                areaIdx != prevHoveringAreaIdx &&
-                prevRelatedAreaIdx != areaIdx
-              ) {
-                startHoverAnimation(areaIdx!);
-              }
-
-              console.log("hovering area idx", areaIdx);
-            }}
-            onHoverEnd={() => {
-              setIsHoveringSkill(undefined);
-              setHoveringAreaIdx(undefined);
-              setPrevHoveringAreaIdx(areaIdx);
-              console.log("Stopped hovering");
-            }}
-            whileHover={loading ? "" : "hover"}
-            key={index}
-            className={`relative h-full w-full p-1`}
-          >
-            <MotionLogo
-              custom={5}
-              className={`${customClassLabel} ${secondCustomClassLabel} h-full w-full`}
-              variants={logoVariants}
-              style={{ rotateZ: (y + x) * 30 }}
-            />
-            <MotionLogo
-              className={`${customClassLabel}-glow ${areaGlowCustomLabel} absolute left-0 top-0 h-full w-full fill-white p-1 blur-lg`}
-              variants={logoShadowVariants}
-              style={{ rotateZ: (y + x) * 30 }}
-            />
+          return (
             <motion.div
-              className="pointer-events-none absolute left-0 right-0 top-2 z-10 ml-auto mr-auto flex h-1 w-1 flex-row content-center items-end justify-center overflow-visible text-sm"
-              variants={descriptionVariants}
+              variants={logoContainerVariants}
+              initial="idle"
+              onHoverStart={() => {
+                setIsHoveringSkill(skill);
+                setHoveringAreaIdx(areaIdx);
+
+                const prevRelatedAreaIdx =
+                  associatedAreaIndex(prevHoveringAreaIdx);
+                if (
+                  areaIdx != prevHoveringAreaIdx &&
+                  prevRelatedAreaIdx != areaIdx
+                ) {
+                  startHoverAnimation(areaIdx!);
+                }
+
+                console.log("hovering area idx", areaIdx);
+              }}
+              onHoverEnd={() => {
+                setIsHoveringSkill(undefined);
+                setHoveringAreaIdx(undefined);
+                setPrevHoveringAreaIdx(areaIdx);
+                console.log("Stopped hovering");
+              }}
+              whileHover={loading ? "" : "hover"}
+              key={index}
+              className={`relative h-full w-full p-1`}
             >
-              <h2 className="z-10 w-fit min-w-fit rounded bg-stone-800 p-3 text-center text-sm">
-                {skill}
-              </h2>
+              <MotionLogo
+                custom={5}
+                className={`${customClassLabel} ${secondCustomClassLabel} h-full w-full`}
+                variants={logoVariants}
+                style={{ rotateZ: (y + x) * 30 }}
+              />
+              <MotionLogo
+                className={`${customClassLabel}-glow ${areaGlowCustomLabel} absolute left-0 top-0 h-full w-full fill-white p-1 blur-lg`}
+                variants={logoShadowVariants}
+                style={{ rotateZ: (y + x) * 30 }}
+              />
+              <motion.div
+                className="pointer-events-none absolute left-0 right-0 top-2 z-10 ml-auto mr-auto flex h-1 w-1 flex-row content-center items-end justify-center overflow-visible text-sm"
+                variants={descriptionVariants}
+              >
+                <h2 className="z-10 w-fit min-w-fit rounded bg-stone-800 p-3 text-center text-sm">
+                  {skill}
+                </h2>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        );
-      })}
-    </motion.div>
+          );
+        })}
+      </motion.div>
+    </div>
   );
 }
