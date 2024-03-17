@@ -21,7 +21,7 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
         whileInView={{ height: (messages.length > 0) ? "100%" : "fit-content" }}
         transition={layoutTransition}>
 
-            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start  overflow-scroll'>
+            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start overflow-hidden'>
                 { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
 
                 <InitialTextDisplayMessage title="Hi! I'm Philip"
