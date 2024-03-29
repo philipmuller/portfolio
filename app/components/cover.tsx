@@ -48,7 +48,7 @@ export default function Cover() {
     <section
       className={`relative flex h-[100svh] w-full snap-mandatory snap-center snap-always flex-col items-center justify-start overflow-hidden lg:col-span-2 lg:flex-row xl:col-span-3 2xl:col-span-4`}
     >
-      <ThreePixelDisplay loading={loading} />
+      <PixelDisplay loading={loading} />
 
       <div className="flex h-full w-full basis-3/5 flex-col justify-center px-64 py-20">
         <Chat messages={messages} onSubmit={handleChatSend} loading={loading} />

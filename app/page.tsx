@@ -46,11 +46,11 @@ export default function Home() {
 
   return (
     <main
-      className="flex h-[100svh] flex-row gap-5 overflow-y-hidden overflow-x-scroll bg-stone-950"
+      className="flex h-[100svh] flex-row gap-5 overflow-y-hidden overflow-x-scroll bg-[#101010]"
       ref={ref}
     >
       <motion.section
-        className="aboutMeContainer grid h-[100svh] min-w-[100svw] snap-y snap-mandatory grid-cols-1 items-center gap-0 overflow-x-hidden overflow-y-scroll p-0 lg:snap-none lg:grid-cols-2 lg:gap-4 lg:p-2 xl:grid-cols-3 2xl:grid-cols-4"
+        className="aboutMeContainer grid h-[100svh] min-w-[100svw] snap-y snap-mandatory grid-cols-1 items-center gap-0 overflow-hidden p-0 lg:snap-none lg:grid-cols-2 lg:gap-4 lg:p-2 xl:grid-cols-3 2xl:grid-cols-4"
         layout
       >
         <Cover />

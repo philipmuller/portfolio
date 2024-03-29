@@ -1,4 +1,4 @@
-import { useAnimate, motion, stagger } from "framer-motion";
+import { useAnimate, motion, stagger, AnimationPlaybackControls } from "framer-motion";
 import { MotionLogo } from "./logo";
 import { useEffect, useState } from "react";
 import { PixelCategories, PixelCategory, pixels } from "../model/pixelModel";
@@ -15,10 +15,15 @@ export default function PixelDisplay({
   };
 }) {
   const [scope, animate] = useAnimate();
+  const [hoveringAreas, setHoveringAreas] = useState<PixelCategory[]>(
+    [],
+  );
+
   const [prevHoveringAreas, setPrevHoveringAreas] = useState<PixelCategory[]>(
     [],
   );
 
+  //this is needed so that children can inherit and sync hover and idle states, even if the container itself is not changed
   const logoContainerVariants = {
     idle: {},
     hover: {},
@@ -26,21 +31,10 @@ export default function PixelDisplay({
 
   const logoVariants = {
     idle: (areaIdx: number) => ({
-      //fill: "#262626",
       scale: 1.0,
     }),
     hover: {
-      //fill: "#FFFFFF",
       scale: 1.1,
-    },
-  };
-
-  const logoShadowVariants = {
-    idle: {
-      //opacity: 0.0,
-    },
-    hover: {
-      //opacity: 1.0,
     },
   };
 
@@ -67,7 +61,27 @@ export default function PixelDisplay({
   const loadingGlowOpacitySequence = params?.glowOpacitySequence ?? [0, 0.6, 0];
   const loadingNextAt = params?.nextAt ?? "-0.26";
 
-  let loadingAnimationSequence: {}[] = [];
+  function areArraysEqual<T>(array1: T[], array2: T[]): boolean {
+    const sortedArray1 = [...array1].sort();
+    const sortedArray2 = [...array2].sort();
+
+    if (sortedArray1.length !== sortedArray2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < sortedArray1.length; i++) {
+      if (sortedArray1[i] !== sortedArray2[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  //this useEffect is used to switch between loading and idle animations
+  useEffect(() => {
+
+    let loadingAnimationSequence: {}[] = [];
   for (let i = 0; i < 9; i++) {
     loadingAnimationSequence.push([
       `svg.ring${i}`,
@@ -107,13 +121,13 @@ export default function PixelDisplay({
       mainLogoSelector += `.${tag}.areaTitle`;
       mainLogoGlowSelector += `.${tag}-glow.areaTitle-glow`;
       associatedSkillsSelector += `.${tag}:not(.areaTitle)`;
-      associatedSkillsGlowSelector += `.${tag}-glow:not(areaTitle-glow)`;
+      associatedSkillsGlowSelector += `.${tag}-glow:not(.areaTitle-glow)`;
     });
 
     const fromColor = baseColor;
     const toColorMain = mainGlowColor;
     const toColorAssociated = associatedGlowColor;
-    const fromOpacity = 0;
+    const fromOpacity = 0.0;
     const toOpacityMain = 0.6;
     const toOpacityAssociated = 0.1;
     const staggerDelay = 0.02;
@@ -147,98 +161,99 @@ export default function PixelDisplay({
       : hoverStyleSequence();
   }
 
-  let resetAnimationSequence: {}[] = [];
-  PixelCategories.forEach((area, _) => {
-    const tag = area.replace(/\s+/g, "");
-
-    resetAnimationSequence.push([`.${tag}`, { fill: baseColor }, { at: "<" }]);
-    resetAnimationSequence.push([`.${tag}-glow`, { opacity: 0 }, { at: "<" }]);
-  });
-
-  let idleAnimationSequence: {}[] = [];
-  PixelCategories.forEach((area, _) => {
-    idleAnimationSequence.push(...areaGlowSequenceBuilder([area]));
-  });
-
-  function startLoadingAnimation() {
-    console.log("startLoadingAnimation");
-    startResetAnimation();
-    //@ts-ignore
-    animate(loadingAnimationSequence, {
-      duration: 1.5,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "loop",
-      repeatDelay: 0,
+    let resetAnimationSequence: {}[] = [];
+    PixelCategories.forEach((area, _) => {
+      const tag = area.replace(/\s+/g, "");
+      resetAnimationSequence.push([`.${tag}`, { fill: baseColor }, { at: "<" }]);
+      resetAnimationSequence.push([`.${tag}-glow`, { opacity: 0 }, { at: "<" }]);
     });
-  }
 
-  function startIdleAnimation() {
-    console.log("startIdleAnimation");
-    startResetAnimation();
-    //@ts-ignore
-    animate(idleAnimationSequence, {
-      duration: 40.0,
-      ease: "easeInOut",
-      repeat: Infinity,
-      repeatType: "loop",
-      repeatDelay: 0,
+    let idleAnimationSequence: {}[] = [];
+    PixelCategories.forEach((area, _) => {
+      idleAnimationSequence.push(...areaGlowSequenceBuilder([area]));
     });
-  }
 
-  function startHoverAnimation(areas: PixelCategory[]) {
-    console.log("startHoverAnimation");
-    startResetAnimation();
+    function startLoadingAnimation(): AnimationPlaybackControls {
+      console.log("startLoadingAnimation");
+      startResetAnimation();
+      //@ts-ignore
+      const controls = animate(loadingAnimationSequence, {
+        duration: 1.5,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "loop",
+        repeatDelay: 0,
+      });
 
-    animate([...areaGlowSequenceBuilder(areas, "hover")], {
-      duration: 1.0,
-      ease: "easeInOut",
-    });
-  }
+      return controls;
+    }
+  
+    function startIdleAnimation(): AnimationPlaybackControls {
+      console.log("startIdleAnimation");
+      startResetAnimation();
+      //@ts-ignore
+      const controls = animate(idleAnimationSequence, {
+        duration: 40.0,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "loop",
+        repeatDelay: 0,
+      });
 
-  function startResetAnimation() {
-    //@ts-ignore
-    animate(resetAnimationSequence, {
-      duration: 0.02,
-      ease: "easeInOut",
-    });
-  }
+      return controls;
+    }
+  
+    function startHoverAnimation(areas: PixelCategory[]): AnimationPlaybackControls {
+      console.log("startHoverAnimation");
+      startResetAnimation();
+  
+      const controls = animate([...areaGlowSequenceBuilder(areas, "hover")], {
+        duration: 1.0,
+        ease: "easeInOut",
+      });
 
-  function areArraysEqual<T>(array1: T[], array2: T[]): boolean {
-    const sortedArray1 = [...array1].sort();
-    const sortedArray2 = [...array2].sort();
+      return controls;
+    }
+  
+    function startResetAnimation(): AnimationPlaybackControls {
+      //@ts-ignore
+      const controls = animate(resetAnimationSequence, {
+        duration: 0.02,
+        ease: "easeInOut",
+      });
 
-    if (sortedArray1.length !== sortedArray2.length) {
-      return false;
+      return controls;
     }
 
-    for (let i = 0; i < sortedArray1.length; i++) {
-      if (sortedArray1[i] !== sortedArray2[i]) {
-        return false;
-      }
-    }
+    var animationControls: AnimationPlaybackControls;
 
-    return true;
-  }
-
-  //this useEffect is used to switch between loading and idle animations
-  useEffect(() => {
     if (loading) {
-      startLoadingAnimation();
+      animationControls = startLoadingAnimation();
     } else {
-      startIdleAnimation();
+
+      if (hoveringAreas.length > 0) {
+        animationControls = startHoverAnimation(hoveringAreas);
+      } else {
+        animationControls = startIdleAnimation();
+      }
+      
     }
-  }, [loading]);
+
+    return () => {
+      animationControls.stop();
+    };
+
+  }, [loading, hoveringAreas]);
 
   return (
-    <div className="basis-2/5 p-20">
+    <div className="basis-2/5 p-28">
       <motion.div
         ref={scope}
         className="grid grid-cols-8 gap-5 fill-neutral-800"
         onHoverEnd={() => {
           console.log("Display Hover Ended");
           setPrevHoveringAreas([]);
-          startIdleAnimation();
+          setHoveringAreas([]);
         }}
       >
         {pixels.map((pixel, index) => {
@@ -267,7 +282,7 @@ export default function PixelDisplay({
               onHoverStart={() => {
                 console.log("hovering areaa", pixel.areas);
                 if (!areArraysEqual(prevHoveringAreas, pixel.areas)) {
-                  startHoverAnimation(pixel.areas);
+                  setHoveringAreas(pixel.areas);
                 }
               }}
               onHoverEnd={() => {
@@ -286,7 +301,6 @@ export default function PixelDisplay({
               />
               <MotionLogo
                 className={`${glowRingTag} ${glowAreaTags}absolute left-0 top-0 h-full w-full fill-white p-1 blur-lg`}
-                variants={logoShadowVariants}
                 style={{ rotateZ: (y + x) * 30 }}
               />
               <motion.div

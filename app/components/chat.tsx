@@ -21,7 +21,7 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
         whileInView={{ height: (messages.length > 0) ? "100%" : "fit-content" }}
         transition={layoutTransition}>
 
-            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start overflow-hidden'>
+            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start overflow-x-hidden overflow-y-hidden'>
                 { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
 
                 <InitialTextDisplayMessage title="Hi! I'm Philip"
@@ -57,7 +57,7 @@ function Chatbox({ onSubmit, loading, placeholder, horizontal } : { onSubmit: (m
     return (
         <form className={`flex ${flexDirection} ${alignment} gap-5 mt-6 relative`}>
 
-                    <motion.textarea layout className='text-stone-200 relative placeholder-stone-500 font-light rounded-xl p-4 bg-neutral-800 resize-none w-full h-20'
+                    <motion.textarea layout className='text-stone-200 relative placeholder-stone-500 font-light rounded-xl p-4 bg-neutral-900 resize-none w-full h-20'
                     name="question" id="qs" value={textAreaValue} onChange={handleTextareaChange}
                     placeholder={placeholder} />
 
@@ -128,7 +128,7 @@ function InitialTextDisplayMessage({title, content, compact} : {title: string, c
 
             </motion.h1>
 
-            <motion.p className={`${contentTextSize} text-white font-extralight text-center lg:text-start`}
+            <motion.p className={`${contentTextSize} text-neutral-300 font-light text-center lg:text-start`}
             initial={{ fontSize: contentTextSize, lineHeight: contentLineHeight }}
             whileInView={{ fontSize: contentTextSize, lineHeight: contentLineHeight }}>
 
