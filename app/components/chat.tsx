@@ -4,6 +4,7 @@ import { useState } from "react";
 import Bubble from "./bubble";
 import { MoonLoader } from "react-spinners";
 import { ArrowUp, Square } from "@phosphor-icons/react";
+import Image from "next/image";
 
 export default function Chat({ messages, onSubmit, loading, placeholderText } : { messages: Message[], onSubmit: (message: Message) => void, loading: boolean, placeholderText?: string }) {
 
@@ -16,23 +17,30 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
     }
 
     return (
-        <motion.div className='flex flex-col gap-2 w-full justify-end'
-        initial={{ height: "fit-content" }}
-        whileInView={{ height: (messages.length > 0) ? "100%" : "fit-content" }}
-        transition={layoutTransition}>
 
-            <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start overflow-x-hidden overflow-y-hidden'>
-                { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
+        <motion.div layout className='flex flex-row gap-16 items-center'>
+            <motion.div layout className='w-72 h-64 relative rounded-2xl overflow-hidden'>
+                <Image src={"/profile.png"} alt={"Picture of the designer"} fill={true} objectFit="cover"/>
+            </motion.div>
+            
+            <motion.div className='flex flex-col gap-2 w-full justify-end'
+            initial={{ height: "fit-content" }}
+            whileInView={{ height: (messages.length > 0) ? "100%" : "fit-content" }}
+            transition={layoutTransition}>
 
-                <InitialTextDisplayMessage title="Hi! I'm Philip"
-                content="I'm a product designer and developer working at the intersection of design and technology."
-                compact={messages.length > 0}/>
+                <motion.div layout className='flex flex-col-reverse gap-2 w-full justify-start overflow-x-hidden overflow-y-hidden'>
+                    { messages.map((message, index) => <Bubble key={messages.length - index - 1} message={message}/>) }
+
+                    <InitialTextDisplayMessage title="Hi! I'm Philip"
+                    content="I'm a product designer and developer working at the intersection of design and technology."
+                    compact={messages.length > 0}/>
+
+                </motion.div>
+
+                <Chatbox onSubmit={onSubmit} loading={loading} placeholder={placeholderText ?? defaultPlaceholderText} horizontal={messages.length > 0}/>
 
             </motion.div>
-
-            <Chatbox onSubmit={onSubmit} loading={loading} placeholder={placeholderText ?? defaultPlaceholderText} horizontal={messages.length > 0}/>
-
-        </motion.div>
+        </motion.div>    
     )
 }
 
@@ -40,7 +48,7 @@ function Chatbox({ onSubmit, loading, placeholder, horizontal } : { onSubmit: (m
 
     const [textAreaValue, setTextAreaValue] = useState("");
 
-    const flexDirection = horizontal ? "flex-row" : "flex-col";
+    const flexDirection = horizontal ? "flex-row" : "flex-row";
     const alignment = horizontal ? "items-end" : "items-start";
 
     function handleFormSubmit() {
@@ -57,7 +65,7 @@ function Chatbox({ onSubmit, loading, placeholder, horizontal } : { onSubmit: (m
     return (
         <form className={`flex ${flexDirection} ${alignment} gap-5 mt-6 relative`}>
 
-                    <motion.textarea layout className='text-stone-200 relative placeholder-stone-500 font-light rounded-xl p-4 bg-neutral-900 resize-none w-full h-20'
+                    <motion.textarea layout className='text-stone-200 relative placeholder-stone-500 font-light rounded-xl p-4 bg-neutral-900 resize-none w-full h-14'
                     name="question" id="qs" value={textAreaValue} onChange={handleTextareaChange}
                     placeholder={placeholder} />
 
@@ -71,20 +79,20 @@ function AskButton({ loading, compact, onClick } : { loading: boolean, compact: 
 
     const buttonVariants = {
         initial: {
-            height: "3rem",
+            height: "3.5rem",
             borderRadius: "0.75rem",
-            width: "8rem",
+            width: "3.5rem",
         },
         default: {
             borderRadius: compact ? "500rem" : "0.75rem",
-            height: compact ? "2.5rem" : "3rem",
-            width: compact ? "2.5rem" : "8rem",
+            height: compact ? "2.5rem" : "3.5rem",
+            width: compact ? "2.5rem" : "5rem",
         }
     }
     const animation = "";//loading ? "animate-ping" : "";
 
     return (
-        <motion.button layout className={`bg-stone-50 min-w-10 flex items-center justify-center relative text-stone-800 font-bold ${animation}`}
+        <motion.button layout className={`bg-gradient-to-r from-neutral-800 via-neutral-700 to-neutral-800 min-w-10 flex items-center justify-center relative text-stone-300 font-bold shadow-neutral-800 shadow-[0_5px_0px_0px_rgba(0,0,0,0.3)] ${animation}`}
         variants={buttonVariants} initial="initial" animate="default"
         //transition={{ type: "spring", damping: 10, stiffness: 100 }}
         type="button" onClick={onClick}>
@@ -107,15 +115,15 @@ function InitialTextDisplayMessage({title, content, compact} : {title: string, c
     return (
         <motion.div layout className='flex flex-col rounded-xl text-lg'
         transition={{ type: "spring", damping: 10, stiffness: 100 }}
-        initial={{ gap: "1.0rem", marginRight: "0.0rem"}}
+        initial={{ gap: "0.7rem", marginRight: "0.0rem"}}
         whileInView={{
-            gap: (compact) ? "0.1rem" : "1.0rem",
+            gap: (compact) ? "0.1rem" : "0.7rem",
             backgroundColor: (compact) ? "#292524" : "#29252400",
             padding: (compact) ? "1rem" : "0rem",
             marginRight: (compact) ? "3.0rem" : "0.0rem",
         }}>
 
-            <motion.h1 className={`${titleTextSize} text-white font-semibold text-center lg:text-start`}
+            <motion.h1 className={`${titleTextSize} text-white font-bold tracking-wide text-center lg:text-start`}
             initial={{ fontSize: titleTextSize, lineHeight: titleLineHeight }}
             whileInView={{ fontSize: titleTextSize, lineHeight: titleLineHeight }}
             onViewportEnter={() => {
@@ -128,7 +136,7 @@ function InitialTextDisplayMessage({title, content, compact} : {title: string, c
 
             </motion.h1>
 
-            <motion.p className={`${contentTextSize} text-neutral-300 font-light text-center lg:text-start`}
+            <motion.p className={`${contentTextSize} text-neutral-300 font-normal text-center lg:text-start`}
             initial={{ fontSize: contentTextSize, lineHeight: contentLineHeight }}
             whileInView={{ fontSize: contentTextSize, lineHeight: contentLineHeight }}>
 

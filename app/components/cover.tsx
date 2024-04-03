@@ -50,7 +50,7 @@ export default function Cover() {
     >
       <PixelDisplay loading={loading} />
 
-      <div className="flex h-full w-full basis-3/5 flex-col justify-center px-64 py-20">
+      <div className="flex h-full w-full basis-3/5 flex-col justify-center px-48 py-20">
         <Chat messages={messages} onSubmit={handleChatSend} loading={loading} />
       </div>
     </section>

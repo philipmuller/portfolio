@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
-import { Inter, Hanken_Grotesk } from 'next/font/google'
+import { Inter, Hanken_Grotesk, Urbanist } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 const hanken = Hanken_Grotesk({ subsets: ['latin'] })
+const urbanist = Urbanist({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={urbanist.className}>
       <meta name="theme-color" content={"#FFFFFF"} />
       <body className='overflow-y-scroll overflow-y-visible'>
         {/* <Navbar /> */}

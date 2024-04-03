@@ -26,7 +26,24 @@ export default function Home() {
   const [scrollOffset, setScrollOffset] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
 
+  const handleWheel = useCallback((ev: WheelEvent) => {
+    //ev.preventDefault();
+
+    const target = ref.current;
+
+    if (!target) {
+      return;
+    }
+
+    console.log("Wheel scroll detected");
+    console.log(target.scrollLeft + ev.deltaY);
+
+    target.scrollBy({top: 0, left: (ev.deltaY < 0 ? -100 : 100)*5 , behavior: "smooth"});
+  }, []);
+
   const handleScroll = useCallback((ev: Event) => {
+    ev.preventDefault();
+
     const target = ev.target as HTMLDivElement;
     setScrollOffset((prev) => target.scrollLeft);
   }, []);
@@ -34,7 +51,12 @@ export default function Home() {
   useEffect(() => {
     const scrollableDiv = ref.current;
     scrollableDiv?.addEventListener("scroll", handleScroll);
-    return () => scrollableDiv?.removeEventListener("scroll", handleScroll);
+    scrollableDiv?.addEventListener("wheel", handleWheel);
+
+    return () =>  {
+      scrollableDiv?.removeEventListener("scroll", handleScroll);
+      scrollableDiv?.removeEventListener("wheel", handleWheel);
+    }
   });
 
   //console.log(breakpoint);

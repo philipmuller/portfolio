@@ -300,7 +300,7 @@ export default function PixelDisplay({
                 style={{ rotateZ: (y + x) * 30 }}
               />
               <MotionLogo
-                className={`${glowRingTag} ${glowAreaTags}absolute left-0 top-0 h-full w-full fill-white p-1 blur-lg`}
+                className={`${glowRingTag} ${glowAreaTags}absolute left-0 top-0 h-full w-full fill-white p-1 blur-2xl`}
                 style={{ rotateZ: (y + x) * 30 }}
               />
               <motion.div
