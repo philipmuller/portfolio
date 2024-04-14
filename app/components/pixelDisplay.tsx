@@ -7,11 +7,13 @@ export default function PixelDisplay({
   loading,
   hoveringSkill,
   setHoveringSkill,
+  skillClicked,
   params,
 }: {
   loading?: boolean;
   hoveringSkill: string | undefined;
   setHoveringSkill: (skill: string | undefined) => void;
+  skillClicked: (skill: string) => void;
   params?: {
     fillSequence?: string[];
     glowOpacitySequence?: number[];
@@ -253,7 +255,7 @@ export default function PixelDisplay({
     <div className="basis-2/5 p-28">
       <motion.div
         ref={scope}
-        className="grid grid-cols-8 gap-5 fill-neutral-800"
+        className="grid grid-cols-8 fill-neutral-800"
         onHoverEnd={() => {
           console.log("Display Hover Ended");
           setPrevHoveringAreas([]);
@@ -296,9 +298,10 @@ export default function PixelDisplay({
                 setHoveringSkill(undefined);
                 console.log("Stopped hovering");
               }}
+              onClick={() => skillClicked(pixel.name)}
               whileHover={loading ? "" : "hover"}
               key={index}
-              className={`relative h-full w-full p-1`}
+              className={`relative h-full w-full p-[18%]`}
             >
               <MotionLogo
                 custom={5}

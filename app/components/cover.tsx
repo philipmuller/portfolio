@@ -12,6 +12,10 @@ export default function Cover() {
   const [threadID, setThreadID] = useState<string | undefined>(undefined);
   const [hoveringSkill, setHoveringSkill] = useState<string | undefined>(undefined);
 
+  function handleSkillClick(skill: string) {
+    handleChatSend({ from: "user", content: `Tell me more about your skills in ${skill}` });
+  }
+
   function handleChatSend(message: Message) {
     setLoading(true);
 
@@ -49,7 +53,7 @@ export default function Cover() {
     <section
       className={`relative flex h-[100svh] w-full snap-mandatory snap-center snap-always flex-col items-center justify-start overflow-hidden lg:col-span-2 lg:flex-row xl:col-span-3 2xl:col-span-4`}
     >
-      <PixelDisplay loading={loading} hoveringSkill={hoveringSkill} setHoveringSkill={setHoveringSkill}/>
+      <PixelDisplay loading={loading} hoveringSkill={hoveringSkill} setHoveringSkill={setHoveringSkill} skillClicked={handleSkillClick}/>
 
       <div className="flex h-full w-full basis-3/5 flex-col justify-center py-20 px-36">
         <Chat messages={messages} onSubmit={handleChatSend} loading={loading} placeholderText={hoveringSkill != undefined ? `Tell me more about your skills in ${hoveringSkill}` : undefined}/>
