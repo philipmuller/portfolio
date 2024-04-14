@@ -5,9 +5,13 @@ import { PixelCategories, PixelCategory, pixels } from "../model/pixelModel";
 
 export default function PixelDisplay({
   loading,
+  hoveringSkill,
+  setHoveringSkill,
   params,
 }: {
   loading?: boolean;
+  hoveringSkill: string | undefined;
+  setHoveringSkill: (skill: string | undefined) => void;
   params?: {
     fillSequence?: string[];
     glowOpacitySequence?: number[];
@@ -254,6 +258,7 @@ export default function PixelDisplay({
           console.log("Display Hover Ended");
           setPrevHoveringAreas([]);
           setHoveringAreas([]);
+          setHoveringSkill(undefined);
         }}
       >
         {pixels.map((pixel, index) => {
@@ -281,12 +286,14 @@ export default function PixelDisplay({
               initial="idle"
               onHoverStart={() => {
                 console.log("hovering areaa", pixel.areas);
+                setHoveringSkill(pixel.name);
                 if (!areArraysEqual(prevHoveringAreas, pixel.areas)) {
                   setHoveringAreas(pixel.areas);
                 }
               }}
               onHoverEnd={() => {
                 setPrevHoveringAreas(pixel.areas);
+                setHoveringSkill(undefined);
                 console.log("Stopped hovering");
               }}
               whileHover={loading ? "" : "hover"}

@@ -18,8 +18,8 @@ export default function Chat({ messages, onSubmit, loading, placeholderText } : 
 
     return (
 
-        <motion.div layout className='flex flex-row gap-16 items-center'>
-            <motion.div layout className='w-72 h-64 relative rounded-2xl overflow-hidden'>
+        <motion.div layout className='flex flex-row gap-10 items-center'>
+            <motion.div layout className='w-72 h-72 relative rounded-full overflow-hidden shrink-0'>
                 <Image src={"/profile.png"} alt={"Picture of the designer"} fill={true} objectFit="cover"/>
             </motion.div>
             
@@ -106,7 +106,7 @@ function AskButton({ loading, compact, onClick } : { loading: boolean, compact: 
 }
 
 function InitialTextDisplayMessage({title, content, compact} : {title: string, content: string, compact: boolean}) {
-    const titleTextSize = compact ? "1.125rem" : "2.25rem";
+    const titleTextSize = compact ? "1.125rem" : "2.8rem";
     const contentTextSize = compact ? "1.125rem" : "1.5rem";
 
     const titleLineHeight = compact ? "1.75rem" : "2.5rem";
@@ -123,7 +123,7 @@ function InitialTextDisplayMessage({title, content, compact} : {title: string, c
             marginRight: (compact) ? "3.0rem" : "0.0rem",
         }}>
 
-            <motion.h1 className={`${titleTextSize} text-white font-bold tracking-wide text-center lg:text-start`}
+            <motion.h1 className={`${titleTextSize} text-white font-semibold tracking-wide text-center lg:text-start`}
             initial={{ fontSize: titleTextSize, lineHeight: titleLineHeight }}
             whileInView={{ fontSize: titleTextSize, lineHeight: titleLineHeight }}
             onViewportEnter={() => {

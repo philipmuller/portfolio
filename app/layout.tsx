@@ -1,11 +1,17 @@
 import type { Metadata } from 'next'
 import { Inter, Hanken_Grotesk, Urbanist } from 'next/font/google'
+import localFont from 'next/font/local'
 import './globals.css'
 import Navbar from './components/navbar'
 
 const inter = Inter({ subsets: ['latin'] })
 const hanken = Hanken_Grotesk({ subsets: ['latin'] })
 const urbanist = Urbanist({ subsets: ['latin'] })
+
+const satoshi = localFont({
+  src: '/Satoshi-Variable.ttf',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -18,9 +24,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={urbanist.className}>
+    <html lang="en" className={satoshi.className}>
       <meta name="theme-color" content={"#FFFFFF"} />
-      <body className='overflow-y-scroll overflow-y-visible'>
+      <meta name="color-scheme" content={"dark"} />
+      <body className='overflow-y-hidden'>
         {/* <Navbar /> */}
         {children}
       </body>
